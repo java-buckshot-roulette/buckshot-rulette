@@ -1,8 +1,8 @@
-package game.doamin.item;
+package game.domain.item;
 
 import game.dto.GameDataDto;
 
-public class Handcuffs implements Item{
+public class Bear implements Item{
     @Override
     public GameDataDto useItem() {
         return null;

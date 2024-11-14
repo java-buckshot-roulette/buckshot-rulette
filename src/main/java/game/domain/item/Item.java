@@ -1,4 +1,4 @@
-package game.doamin.item;
+package game.domain.item;
 
 import game.dto.GameDataDto;
 

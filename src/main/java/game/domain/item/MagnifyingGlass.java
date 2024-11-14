@@ -1,8 +1,8 @@
-package game.doamin.item;
+package game.domain.item;
 
 import game.dto.GameDataDto;
 
-public class CigarettePack implements Item {
+public class MagnifyingGlass implements Item {
     @Override
     public GameDataDto useItem() {
         return null;
