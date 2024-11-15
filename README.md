@@ -38,7 +38,7 @@ Buckshot Roulette 을 구현해야 한다. Buckshot Roulette 은 아래와 같�
 ### 아이템
 아이템은 최대 8개까지 소지 가능하다.
 
-* 산탄총 (Shotgun)
+* 산탄총(Shotgun)
 
 ```
 
