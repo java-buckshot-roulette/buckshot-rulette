@@ -1,5 +1,6 @@
 package game.util;
 
+import game.domain.bullet.Bullet;
 import game.domain.item.Item;
 import java.util.List;
 import java.util.Optional;
@@ -19,5 +20,19 @@ public class Randoms {
         int randomIndex = defaultRandom.nextInt(items.size());
         return Optional.ofNullable(items.get(randomIndex));
     }
+
+    public static Optional<Bullet> pickBulletInList(List<Bullet> bullets) {
+        if (bullets == null || bullets.isEmpty()) {
+            return Optional.empty();
+        }
+        int randomIndex = defaultRandom.nextInt(bullets.size());
+        return Optional.ofNullable(bullets.get(randomIndex));
+    }
+
+    public static int pickNumberInRange(int startInclusive, int endInclusive) {
+        return startInclusive + defaultRandom.nextInt(endInclusive - startInclusive + 1);
+    }
+
+
 
 }
