@@ -11,8 +11,13 @@ public class Bear implements Item{
     public ItemUsageRequestDto useItem(ItemUsageRequestDto itemUsageRequestDto) {
         GameStateDto gameStateDto = itemUsageRequestDto.gameDataDto();
         List<Bullet> newBullets = new ArrayList<>(gameStateDto.bullets());
-        newBullets.removeFirst();
+        removeFirstBullet(newBullets);
         return itemUsageRequestDto
-                .changeGameData(gameStateDto.changeBullets(newBullets));
+                .changeGameData(gameStateDto.changeBullets(newBullets))
+                .reduceCasterItem(this);
+    }
+
+    private void removeFirstBullet(List<Bullet> newBullets) {
+        newBullets.removeFirst();
     }
 }
