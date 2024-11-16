@@ -2,10 +2,8 @@ package game.util;
 
 import static game.domain.bullet.Type.RED;
 import static game.domain.item.ItemConfig.BEAR;
-import static org.junit.jupiter.api.Assertions.*;
 
 import game.domain.bullet.Bullet;
-import game.domain.bullet.Type;
 import game.domain.item.Item;
 import java.util.List;
 import java.util.Optional;
