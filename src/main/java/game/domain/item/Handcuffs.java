@@ -1,10 +1,10 @@
 package game.domain.item;
 
-import game.dto.GameDataDto;
+import game.dto.ItemUsageRequestDto;
 
 public class Handcuffs implements Item{
     @Override
-    public GameDataDto useItem() {
+    public ItemUsageRequestDto useItem() {
         return null;
     }
 }

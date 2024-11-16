@@ -1,7 +1,7 @@
 package game.domain.item;
 
-import game.dto.GameDataDto;
+import game.dto.ItemUsageRequestDto;
 
 public interface Item {
-    GameDataDto useItem();
+    ItemUsageRequestDto useItem();
 }
