@@ -2,11 +2,12 @@ package game.domain.item;
 
 import static game.domain.Role.CHALLENGER;
 import static game.domain.Role.DEALER;
-import static game.domain.bullet.Type.BLUE;
-import static game.domain.bullet.Type.RED;
+import static game.domain.bullet.BulletConfig.BLUE;
+import static game.domain.bullet.BulletConfig.RED;
 
 import game.domain.LifeAndDeath;
-import game.domain.bullet.Bullet;
+
+import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
@@ -26,8 +27,7 @@ class CigarettePackTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(List.of(new Bullet(RED), new Bullet(BLUE)),
-                List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 

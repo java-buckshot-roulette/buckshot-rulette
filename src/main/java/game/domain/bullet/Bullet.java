@@ -4,11 +4,24 @@ import java.util.Objects;
 
 public class Bullet {
     private final Type type;
-    private final int damage;
+    private int damage;
 
     public Bullet(Type type) {
         this.type = type;
         this.damage = type.initialDamage();
+    }
+
+    public Bullet(Type type, int damage) {
+        this.type = type;
+        this.damage = damage;
+    }
+
+    public Bullet doubleUpDamage() {
+        return new Bullet(this.type, this.damage *= 2);
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     @Override
