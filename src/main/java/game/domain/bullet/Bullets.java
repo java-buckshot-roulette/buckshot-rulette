@@ -12,22 +12,29 @@ public class Bullets {
     }
 
     public Bullets StrengthenFirstBullet() {
-        List<Bullet> newBullets = new ArrayList<>(values);
+        List<Bullet> newBullets = getBullets();
         Bullet newBullet = newBullets.getFirst().doubleUpDamage();
-        newBullets.addFirst(newBullet);;
+        newBullets.addFirst(newBullet);
 
         return new Bullets(newBullets);
-    }
-
-    public int getFirstBulletDamage() {
-        return values.getFirst()
-                .getDamage();
     }
 
     public Bullets removeFirst() {
-        List<Bullet> newBullets = new ArrayList<>(values);
+        List<Bullet> newBullets = getBullets();
         newBullets.removeFirst();
         return new Bullets(newBullets);
+    }
+
+    public Bullets invertFirstBullet() {
+        List<Bullet> newBullets = getBullets();
+        Bullet first = newBullets.getFirst().invertType();
+        newBullets.removeFirst();
+        newBullets.addFirst(first);
+        return new Bullets(newBullets);
+    }
+
+    private List<Bullet> getBullets() {
+        return new ArrayList<>(values);
     }
 
     @Override
@@ -42,5 +49,10 @@ public class Bullets {
     @Override
     public int hashCode() {
         return Objects.hashCode(values);
+    }
+
+    public int getFirstBulletDamage() {
+        return values.getFirst()
+                .getDamage();
     }
 }

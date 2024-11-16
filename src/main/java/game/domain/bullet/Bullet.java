@@ -20,6 +20,13 @@ public class Bullet {
         return new Bullet(this.type, this.damage *= 2);
     }
 
+    public Bullet invertType() {
+        if (type.equals(Type.RED)) {
+            return new Bullet(Type.BLUE);
+        }
+        return new Bullet(Type.RED);
+    }
+
     public int getDamage() {
         return damage;
     }
