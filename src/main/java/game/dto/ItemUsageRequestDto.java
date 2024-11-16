@@ -1,5 +1,7 @@
 package game.dto;
 
+import game.domain.item.Item;
+
 public record ItemUsageRequestDto(PlayerDataDto caster, PlayerDataDto target, GameStateDto gameDataDto) {
     public ItemUsageRequestDto changeCasterData(PlayerDataDto newCaster) {
         return new ItemUsageRequestDto(newCaster, this.target, this.gameDataDto);
@@ -11,5 +13,11 @@ public record ItemUsageRequestDto(PlayerDataDto caster, PlayerDataDto target, Ga
 
     public ItemUsageRequestDto changeGameData(GameStateDto newGameData) {
         return new ItemUsageRequestDto(this.caster, this.target, newGameData);
+    }
+
+    public ItemUsageRequestDto reduceCasterItem(Item item) {
+        PlayerDataDto newCaster = this.caster;
+        newCaster.reduceItem(item);
+        return new ItemUsageRequestDto(newCaster, this.target, this.gameDataDto);
     }
 }
