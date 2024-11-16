@@ -1,6 +1,7 @@
 package game.util;
 
 import game.domain.bullet.Bullet;
+import game.domain.item.HealOrDiscount;
 import game.domain.item.Item;
 import java.util.List;
 import java.util.Optional;
@@ -34,5 +35,9 @@ public class Randoms {
     }
 
 
+    public static HealOrDiscount pickHealOrDiscount() {
+        int randomIndex = defaultRandom.nextInt(HealOrDiscount.values().length);
+        return HealOrDiscount.values()[randomIndex];
+    }
 
 }
