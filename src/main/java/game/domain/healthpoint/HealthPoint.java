@@ -13,6 +13,10 @@ public class HealthPoint {
         return new HealthPoint(this.value + healingPoint.value);
     }
 
+    public HealthPoint discount(HealthPoint discountPoint) {
+        return new HealthPoint(this.value - discountPoint.value);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
