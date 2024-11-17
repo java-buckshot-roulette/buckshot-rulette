@@ -1,10 +1,10 @@
 package game.service.player;
 
-import game.domain.healthpoint.HealthPoint;
-import game.domain.item.Items;
+import game.dto.GameStateDto;
+import game.dto.ItemUsageResponseDto;
+import game.dto.PlayerDataDto;
 
 public interface PlayerService {
-    void storeItems(Items items);
-    void recoveryHealthPoint(HealthPoint healthPoint);
-    void sufferDamage(HealthPoint healthPoint);
+
+    ItemUsageResponseDto useItem(PlayerDataDto rival, GameStateDto gameStateDto);
 }
