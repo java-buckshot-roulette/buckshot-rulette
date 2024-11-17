@@ -5,9 +5,7 @@ import static game.domain.Role.CHALLENGER;
 import static game.domain.Role.DEALER;
 import static game.domain.bullet.BulletConfig.BLUE;
 import static game.domain.bullet.BulletConfig.RED;
-import static org.junit.jupiter.api.Assertions.*;
 
-import game.domain.LifeAndDeath;
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
 import game.dto.GameStateDto;
@@ -65,6 +63,52 @@ class ShotGunTest {
                         .gameDataDto()
                         .bullets())
                 .isEqualTo(new Bullets(List.of(BLUE)));
+    }
+
+    @Test
+    void 살상탄일때_타겟을_죽은_상태로() {
+        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+                LIFE);
+
+        PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
+                LIFE);
+
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+
+        ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
+
+        //when
+        Item shotGun = new ShotGun();
+        ItemUsageRequestDto newItemRequest = shotGun.useItem(itemUsageRequestDto);
+
+        //then
+        Assertions.assertThat(newItemRequest
+                        .target()
+                        .lifeAndDeath())
+                .isEqualTo(DEATH);
+    }
+
+    @Test
+    void 비살상탄일때_타겟이_생존상태_이어야한다() {
+        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+                LIFE);
+
+        PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
+                LIFE);
+
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(BLUE, BLUE)), List.of(CHALLENGER, DEALER));
+
+        ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
+
+        //when
+        Item shotGun = new ShotGun();
+        ItemUsageRequestDto newItemRequest = shotGun.useItem(itemUsageRequestDto);
+
+        //then
+        Assertions.assertThat(newItemRequest
+                        .target()
+                        .lifeAndDeath())
+                .isEqualTo(LIFE);
     }
 
 }

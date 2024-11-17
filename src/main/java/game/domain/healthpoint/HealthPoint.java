@@ -17,6 +17,10 @@ public class HealthPoint {
         return new HealthPoint(this.value - discountPoint.value);
     }
 
+    public boolean isGreaterThanOne() {
+        return value >= 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
