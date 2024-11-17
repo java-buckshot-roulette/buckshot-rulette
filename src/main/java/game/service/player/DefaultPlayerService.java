@@ -114,8 +114,4 @@ public class DefaultPlayerService implements PlayerService {
     private Item readItem() {
         return Convertor.StringToItem(inputView.readItem());
     }
-
-    private boolean hasItem(Item item) {
-        return player.hasItem(item);
-    }
 }

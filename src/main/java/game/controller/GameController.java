@@ -14,6 +14,7 @@ import game.domain.item.Items;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
+import game.service.Defibrillator;
 import game.service.Stage.DefaultStageReferee;
 import game.service.Stage.GameResult;
 import game.service.Stage.StageReferee;
@@ -58,33 +59,30 @@ public class GameController {
         this.stageDependency = stageDependency;
         this.inputView = inputView;
         this.outputView = outputView;
+        defibrillator = new Defibrillator(true, true);
     }
 
     public void run() {
         GameResult gameState = ONGOING;
+        initializeStage();
 
         do {
-            if (stageDependency.isFirstStage()) {
-                reloadBullet();
-                challengerService.initializePlayer(stageDependency);
-                dealerService.initializePlayer(stageDependency);
-            }
-
             if (gameState.equals(GO_NEXT_STAGE)) {
                 stageDependency = stageDependency.nextStage();
-                reloadBullet();
-                challengerService.initializePlayer(stageDependency);
-                dealerService.initializePlayer(stageDependency);
+                initializeStage();
             }
 
             // 탄을 재장전할 때
             // 1. 턴을 초기화
             // 2. 아이템을 플레이어들에게 나눠줌
             if (bullets.isEmpty()) {
-                reloadBullet();
+                prepareForRound();
             }
 
             proceedGameTurn();
+
+            tryToBreakDefibrillator();
+            tryUsingDefibrillation();
 
             gameState = stageReferee.judgeGameResult(challengerService.requestPlayerDataDto(),
                     dealerService.requestPlayerDataDto(), stageDependency);
@@ -93,11 +91,27 @@ public class GameController {
 
     }
 
-    private void reloadBullet() {
-        bullets.reload(
-                bulletGenerator.generateBullet(
-                        Randoms.pickNumberInRange(3, 8)));    //Todo: dependency 로 관리할지 고민하기
+    private void tryToBreakDefibrillator() {
+        defibrillator.tryToBreakDefibrillators(challengerService.requestPlayerDataDto(),
+                dealerService.requestPlayerDataDto(), stageDependency);
+    }
 
+    private void tryUsingDefibrillation() {
+        challengerService.applyPlayerDataDto(defibrillator.tryUsingChallengerDefibrillator(challengerService.requestPlayerDataDto()));
+
+        dealerService.applyPlayerDataDto(defibrillator.tryUsingDealersDefibrillator(dealerService.requestPlayerDataDto()));
+    }
+
+    private void initializeStage() {
+        prepareForRound();
+        defibrillator.initializeDefibrillator();
+        challengerService.initializePlayer(stageDependency);
+        dealerService.initializePlayer(stageDependency);
+    }
+
+    private void prepareForRound() {
+        bullets.reload(bulletGenerator.generateBullet(Randoms.pickNumberInRange(3, 8)));
+        printBullets();
         turnService.initializeTurn();
         handOutItems();
     }
