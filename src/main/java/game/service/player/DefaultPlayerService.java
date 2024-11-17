@@ -1,5 +1,6 @@
 package game.service.player;
 
+import game.config.StageDependency;
 import game.domain.Player;
 import game.domain.item.Item;
 import game.domain.item.ItemType;
@@ -9,6 +10,7 @@ import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
 import game.util.Convertor;
 import game.view.input.InputView;
+import java.util.List;
 
 public class DefaultPlayerService implements PlayerService {
     private Player player;
@@ -25,9 +27,32 @@ public class DefaultPlayerService implements PlayerService {
         return processItemsUntilShotgun(rival, gameStateDto);
     }
 
+    @Override
+    public PlayerDataDto requestPlayerDataDto() {
+        return player.makePlayerDataDto();
+    }
+
+    @Override
+    public void applyPlayerDataDto(PlayerDataDto playerDataDto) {
+        player = player.applyEffect(playerDataDto);
+    }
+
+    @Override
+    public void addItem(List<Item> items) {
+        player = player.addItem(items);
+    }
+
+    @Override
+    public void initializePlayer(StageDependency stageDependency) {
+        player = player
+                .initializeHealthPoint(stageDependency.getPlayerInitialHealthPoint())
+                .initializeItems();
+    }
+
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
         Item item;
-        while (!(item = readItem()).equals(ItemType.SHOT_GUN.getInstance())) {
+        while (!(item = readItem()).equals(
+                ItemType.SHOT_GUN.getInstance())) {  //Todo: 가지고 있지 않은 아이템을 입력 시 제대로 된 아이템 입력할 때까지 반복 입력
             ItemUsageRequestDto newitemUsageRequestDto = item.useItem(
                     makeTargetingRival(rival, gameStateDto));
             return makeTargetingRival(newitemUsageRequestDto);
@@ -69,7 +94,7 @@ public class DefaultPlayerService implements PlayerService {
      * @return 아이템을 적용한 후 상태의 response
      */
     private ItemUsageResponseDto makeTargetingRival(ItemUsageRequestDto targetingRival) {
-        player = player.applyEffect(targetingRival.caster());   //나의 정보 갱신
+        applyPlayerDataDto(targetingRival.caster());    //나의 정보 갱신
         return new ItemUsageResponseDto(targetingRival.target(), targetingRival.gameDataDto());
     }
 
@@ -82,7 +107,7 @@ public class DefaultPlayerService implements PlayerService {
      * @return 아이템 사용 후 ItemResponse
      */
     private ItemUsageResponseDto makeTargetingMe(PlayerDataDto rival, PlayerDataDto caster, GameStateDto gameStateDto) {
-        player = player.applyEffect(caster);
+        applyPlayerDataDto(caster);
         return new ItemUsageResponseDto(rival, gameStateDto);
     }
 

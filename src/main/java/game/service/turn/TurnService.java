@@ -5,5 +5,10 @@ import java.util.List;
 
 public interface TurnService {
     Role getTurn();
-    void initializeTurn(int bulletSize);
+
+    void initializeTurn();
+
+    List<Role> requestTurns();
+
+    void applyTurns(List<Role> turns);
 }

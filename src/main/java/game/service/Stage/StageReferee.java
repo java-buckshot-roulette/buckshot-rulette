@@ -1,8 +1,8 @@
 package game.service.Stage;
 
-import game.domain.GameResult;
-import game.domain.LifeAndDeath;
+import game.config.StageDependency;
+import game.dto.PlayerDataDto;
 
 public interface StageReferee {
-    GameResult judgeGameResult(LifeAndDeath myStatus, LifeAndDeath revelStatus);
+    GameResult judgeGameResult(PlayerDataDto challenger, PlayerDataDto dealer, StageDependency stageDependency);
 }

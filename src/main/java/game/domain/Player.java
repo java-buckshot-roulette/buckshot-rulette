@@ -4,6 +4,8 @@ import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
 import game.domain.item.Items;
 import game.dto.PlayerDataDto;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
     private final Role role;
@@ -32,6 +34,19 @@ public class Player {
 
     public Player applyEffect(PlayerDataDto newPlayerData) {
         return new Player(role, newPlayerData.items(), newPlayerData.healthPoint(), newPlayerData.lifeAndDeath());
+    }
+
+    public Player addItem(List<Item> items) {
+        Items addingItems = new Items(items);
+        return new Player(role, this.items.add(addingItems), healthPoint, lifeAndDeath);
+    }
+
+    public Player initializeHealthPoint(HealthPoint initialValue) {
+        return new Player(role, items, initialValue, lifeAndDeath);
+    }
+
+    public Player initializeItems() {
+        return new Player(role, new Items(new ArrayList<>()), healthPoint, lifeAndDeath);
     }
 
 }

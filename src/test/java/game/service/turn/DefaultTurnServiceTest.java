@@ -18,7 +18,7 @@ class DefaultTurnServiceTest {
         TurnService turnService = new DefaultTurnService(turns);
 
         //when
-        turnService.initializeTurn(1);
+        turnService.initializeTurn();
 
         //then
         Assertions.assertThat(turnService.getTurn()).isEqualTo(CHALLENGER);
