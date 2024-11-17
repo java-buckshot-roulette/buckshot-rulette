@@ -33,6 +33,14 @@ public class Bullets {
         return new Bullets(newBullets);
     }
 
+    public boolean isEmpty() {
+        return values.isEmpty();
+    }
+
+    public void reload(List<Bullet> bullets) {
+        values.addAll(bullets);
+    }
+
     private List<Bullet> getBullets() {
         return new ArrayList<>(values);
     }
