@@ -1,8 +1,10 @@
 package game.domain.bullet;
 
+import game.util.Randoms;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Bullets {
     private final List<Bullet> values;
@@ -62,5 +64,13 @@ public class Bullets {
     public int getFirstBulletDamage() {
         return values.getFirst()
                 .getDamage();
+    }
+
+    @Override
+    public String toString() {
+        return "생성된 탄알: [" + Randoms.shuffle(values)
+                .stream()
+                .map(Bullet::toString)
+                .collect(Collectors.joining(", ")) + "]";
     }
 }

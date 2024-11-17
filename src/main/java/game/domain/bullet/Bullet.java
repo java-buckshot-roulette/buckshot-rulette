@@ -44,4 +44,9 @@ public class Bullet {
     public int hashCode() {
         return Objects.hash(type, damage);
     }
+
+    @Override
+    public String toString() {
+        return type.toString();
+    }
 }

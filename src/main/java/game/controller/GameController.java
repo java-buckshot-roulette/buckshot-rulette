@@ -42,6 +42,7 @@ public class GameController {
     private StageDependency stageDependency;
     private final InputView inputView;
     private final OutputView outputView;
+    private final Defibrillator defibrillator;
 
     public GameController(PlayerService challengerService, PlayerService dealerService, BulletGenerator bulletGenerator,
                           ItemGenerator itemGenerator, StageReferee stageReferee, TurnService turnService,
@@ -147,6 +148,10 @@ public class GameController {
         return new GameStateDto(bullets, turnService.requestTurns());
     }
 
+    private void printBullets() {
+        outputView.println(bullets.toString());
+    }
+
     public static void main(String[] args) {
         OutputView outputView = new OutputView();
         InputView inputView = new InputView(outputView);
@@ -161,7 +166,7 @@ public class GameController {
         StageReferee stageReferee = new DefaultStageReferee();
         TurnService turnService = new DefaultTurnService(new ArrayList<>());
         Bullets bullets = new Bullets(new ArrayList<>());
-        StageDependency stageDependency = StageDependency.FIRST;
+        StageDependency stageDependency = StageDependency.THIRD;
         GameController gameController = new GameController(playerService, dealerService, bulletGenerator, itemGenerator,
                 stageReferee, turnService, bullets, stageDependency, inputView, outputView);
 
