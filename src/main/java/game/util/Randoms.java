@@ -3,6 +3,8 @@ package game.util;
 import game.domain.bullet.Bullet;
 import game.domain.item.HealOrDiscount;
 import game.domain.item.Item;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -40,4 +42,9 @@ public class Randoms {
         return HealOrDiscount.values()[randomIndex];
     }
 
+    public static <T> List<T> shuffle(List<T> list) {
+        List<T> result = new ArrayList(list);
+        Collections.shuffle(result);
+        return result;
+    }
 }

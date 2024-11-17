@@ -3,6 +3,7 @@ package game.service.bullet;
 import static game.domain.bullet.BulletConfig.BLUE;
 import static game.domain.bullet.BulletConfig.RED;
 import static game.util.Randoms.pickBulletInList;
+import static game.util.Randoms.shuffle;
 
 import game.domain.bullet.Bullet;
 import game.domain.bullet.BulletConfig;
@@ -22,6 +23,6 @@ public class DefaultBulletGenerator implements BulletGenerator{
             Optional<Bullet> item = pickBulletInList(BULLETS_SET);
             item.ifPresent(bullets::add);
         }
-        return bullets;
+        return shuffle(bullets);
     }
 }
