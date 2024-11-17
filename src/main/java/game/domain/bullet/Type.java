@@ -13,4 +13,12 @@ public enum Type {
     public int initialDamage() {
         return this.initialDamage;
     }
+
+    @Override
+    public String toString() {
+        if(this.equals(RED)) {
+            return "빨강";
+        }
+        return "파랑";
+    }
 }
