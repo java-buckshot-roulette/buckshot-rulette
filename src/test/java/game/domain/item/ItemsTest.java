@@ -13,11 +13,12 @@ class ItemsTest {
     void 아이템_추가() {
         //given
         List<Item> oldItem = List.of(BEAR);
-        List<Item> additionalItems = List.of(BEAR, BEAR, BEAR, BEAR, BEAR, BEAR, HAND_CUFFS, EXPIRED_MEDICINE);
+        List<Item> additionalItemList = List.of(BEAR, BEAR, BEAR, BEAR, BEAR, BEAR, HAND_CUFFS, EXPIRED_MEDICINE);
         Items items = new Items(oldItem);
+        Items additionalItems = new Items(additionalItemList);
 
         //when
-        Items newItems = items.addItems(additionalItems);
+        Items newItems = items.add(additionalItems);
 
         //then
         assertThat(newItems.contains(HAND_CUFFS)).isTrue();

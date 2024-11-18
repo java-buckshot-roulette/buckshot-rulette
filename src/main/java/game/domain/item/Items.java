@@ -11,10 +11,12 @@ public class Items {
         this.values = items;
     }
 
-    public Items addItems(List<Item> items) {
+
+    public Items add(Items items) {
         List<Item> combined = new ArrayList<>(values);
         combined.addAll(
-                items.stream()
+                items.values
+                        .stream()
                         .limit(MAX_SIZE - values.size())
                         .toList()
         );
@@ -23,5 +25,11 @@ public class Items {
 
     public boolean contains(Item item) {
         return values.contains(item);
+    }
+
+    public Items reduceItem(Item item) {
+        List<Item> newValues = new ArrayList<>(values);
+        newValues.remove(item);
+        return new Items(newValues);
     }
 }

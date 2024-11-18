@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum ItemType {
-    BEAR(new Bear(), "bear"),
-    CIGARETTE_PACK(new CigarettePack(), "cigarette pack"),
-    EXPIRED_MEDICINE(new ExpiredMedicine(), "expired medicine"),
-    HAND_CUFFS(new Handcuffs(), "handcuffs"),
-    INVERTER(new Inverter(), "inverter"),
-    MAGNIFYING_GLASS(new MagnifyingGlass(), "magnifying glass"),
-    SHOT_GUN(new ShotGun(), "shot gun");
+    BEAR(new Bear(), "맥주"),
+    CIGARETTE_PACK(new CigarettePack(), "담배"),
+    EXPIRED_MEDICINE(new ExpiredMedicine(), "상한약"),
+    HAND_CUFFS(new Handcuffs(), "수갑"),
+    INVERTER(new Inverter(), "인버터"),
+    MAGNIFYING_GLASS(new MagnifyingGlass(), "돋보기"),
+    SHOT_GUN(new ShotGun(), "총");
 
     private static final Map<String, ItemType> NAME_TO_ENUM =
             Stream.of(values()).collect(Collectors.toMap(ItemType::getName, e -> e));
