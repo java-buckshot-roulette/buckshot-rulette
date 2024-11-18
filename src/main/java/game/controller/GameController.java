@@ -103,10 +103,14 @@ public class GameController {
     }
 
     private void initializeStage() {
+        printStage();
+
         prepareForRound();
         defibrillator.initializeDefibrillator();
         challengerService.initializePlayer(stageDependency);
         dealerService.initializePlayer(stageDependency);
+
+        printHealthPoint();
     }
 
     private void prepareForRound() {
