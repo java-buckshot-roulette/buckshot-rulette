@@ -53,6 +53,10 @@ public enum StageDependency {
         return playerDataDto.healthPoint()
                 .equals(breakingDefibrillator);
     }
+
+    public int getStageNumber() {
+        return ordinal() + 1;
+    }
 }
 
 

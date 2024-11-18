@@ -72,23 +72,31 @@ public class GameController {
                 initializeStage();
             }
 
-            // 탄을 재장전할 때
-            // 1. 턴을 초기화
-            // 2. 아이템을 플레이어들에게 나눠줌
             if (bullets.isEmpty()) {
                 prepareForRound();
             }
 
             proceedGameTurn();
 
-            tryToBreakDefibrillator();
             tryUsingDefibrillation();
+            tryToBreakDefibrillator();
 
             gameState = stageReferee.judgeGameResult(challengerService.requestPlayerDataDto(),
                     dealerService.requestPlayerDataDto(), stageDependency);
 
         } while (gameState.equals(ONGOING) || gameState.equals(GO_NEXT_STAGE));
 
+    }
+
+    private void printStage() {
+        outputView.printStage(stageDependency.getStageNumber());
+    }
+
+    private void printHealthPoint() {
+        String dealerHealth = dealerService.requestPlayerDataDto().healthPoint().toString();
+        String challengerHealth = challengerService.requestPlayerDataDto().healthPoint().toString();
+
+        outputView.printPlayersHealthPoint(dealerHealth, challengerHealth);
     }
 
     private void tryToBreakDefibrillator() {
@@ -113,6 +121,12 @@ public class GameController {
         printHealthPoint();
     }
 
+    /**
+     * 라운드 -> 탄을 재장전하는 단위
+     * 1. 탄을 재장전
+     * 2. 아이템을 플레이어들에게 나눠줌
+     * 3. 게임 턴을 초기화 (라운드 시작 시 항상 도전자가 먼저 아이템을 사용)
+     */
     private void prepareForRound() {
         bullets.reload(bulletGenerator.generateBullet(Randoms.pickNumberInRange(3, 8)));
         printBullets();
@@ -167,7 +181,7 @@ public class GameController {
     }
 
     private void printBullets() {
-        outputView.println(bullets.toString());
+        outputView.printBullet(bullets.toString());
     }
 
     public static void main(String[] args) {
