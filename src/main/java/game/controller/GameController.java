@@ -177,27 +177,4 @@ public class GameController {
     private void printBullets() {
         outputView.printBullet(bullets.toString());
     }
-
-    public static void main(String[] args) {
-        OutputView outputView = new OutputView();
-        InputView inputView = new InputView(outputView);
-        PlayerService playerService = new DefaultPlayerService(
-                new Player(Role.CHALLENGER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView, outputView);
-        PlayerService dealerService = new DefaultPlayerService(
-                new Player(Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView, outputView);
-        BulletGenerator bulletGenerator = new DefaultBulletGenerator();
-        ItemGenerator itemGenerator = new DefaultItemGenerator();
-        StageReferee stageReferee = new DefaultStageReferee();
-        TurnService turnService = new DefaultTurnService(new ArrayList<>());
-        Bullets bullets = new Bullets(new ArrayList<>());
-        StageDependency stageDependency = StageDependency.THIRD;
-        GameController gameController = new GameController(playerService, dealerService, bulletGenerator, itemGenerator,
-                stageReferee, turnService, bullets, stageDependency, inputView, outputView);
-
-        gameController.run();
-    }
-
-
 }
