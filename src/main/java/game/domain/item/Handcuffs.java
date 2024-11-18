@@ -1,5 +1,7 @@
 package game.domain.item;
 
+import static game.domain.item.ItemType.HAND_CUFFS;
+
 import game.domain.Role;
 import game.dto.ItemUsageRequestDto;
 import java.util.ArrayList;
@@ -17,5 +19,10 @@ public class Handcuffs implements Item {
                         .gameDataDto()
                         .changeTurns(newTurns))
                 .reduceCasterItem(this);
+    }
+
+    @Override
+    public String toString() {
+        return HAND_CUFFS.getName();
     }
 }

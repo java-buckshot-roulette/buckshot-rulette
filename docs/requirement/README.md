@@ -15,8 +15,8 @@
     - [x] 상대가 다음 차례를 넘기도록 한다.
 - [x] 맥주(Beer)
     - [x] 약실에 장전된 탄을 빼낸다.
-- [ ] 돋보기(Magnifying Glass)
-    - [ ] 약실에 장전된 탄을 확인한다.
+- [x] 돋보기(Magnifying Glass)
+    - [x] 약실에 장전된 탄을 확인한다.
 - [x] 담배(Cigarette Pack)
   - [x] 생명력을 한 칸 회복한다.
 - [ ] 쇠톱(Hand Saw)

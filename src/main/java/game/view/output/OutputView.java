@@ -1,5 +1,7 @@
 package game.view.output;
 
+import game.dto.PlayerDataDto;
+
 public class OutputView {
 
     public void printPersonToBeShot() {
@@ -16,15 +18,32 @@ public class OutputView {
 
     public void printStage(int stageNumber) {
         println("-----------");
-        println(String.valueOf(stageNumber + "스테이지"));
+        println(stageNumber + "스테이지");
         println("-----------\n");
+    }
+
+    public void printPlayerState(PlayerDataDto dealer, PlayerDataDto challenger) {
+        String dealerHealth = dealer.healthPoint().toString();
+        String playerHealth = challenger.healthPoint().toString();
+        String dealerItems = dealer.items().toString();
+        String playerItems = challenger.items().toString();
+
+        printPlayersHealthPoint(dealerHealth, playerHealth);
+        printPlayersItems(dealerItems, playerItems);
     }
 
     public void printPlayersHealthPoint(String dealerHealth, String challengerHealth) {
         println("딜러의 체력");
         println(dealerHealth + "\n");
         println("플레이어의 체력");
-        println(challengerHealth + "\n\n");
+        println(challengerHealth + "\n");
+    }
+
+    public void printPlayersItems(String dealerItems, String challengerItems) {
+        println("아이템 목록\n\n" + "딜러");
+        println(dealerItems + "\n");
+        println("플레이어");
+        println(challengerItems + "\n");
     }
 
     public void printBullet(String bullets) {

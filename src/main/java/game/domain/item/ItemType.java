@@ -17,8 +17,8 @@ public enum ItemType {
     private static final Map<String, ItemType> NAME_TO_ENUM =
             Stream.of(values()).collect(Collectors.toMap(ItemType::getName, e -> e));
 
-    public final Item instance;
-    public final String name;
+    private final Item instance;
+    private final String name;
 
     private ItemType(Item instance, String name) {
         this.instance = instance;
@@ -37,5 +37,6 @@ public enum ItemType {
         return Optional.ofNullable(NAME_TO_ENUM.get(name.toLowerCase()))
                 .map(ItemType::getInstance);
     }
+
 }
 

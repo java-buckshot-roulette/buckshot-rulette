@@ -1,5 +1,7 @@
 package game.domain.item;
 
+import static game.domain.item.ItemType.BEAR;
+
 import game.domain.bullet.Bullets;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
@@ -14,5 +16,10 @@ public class Bear implements Item {
         return itemUsageRequestDto
                 .changeGameData(gameStateDto.changeBullets(newBullets))
                 .reduceCasterItem(this);
+    }
+
+    @Override
+    public String toString() {
+        return BEAR.getName();
     }
 }

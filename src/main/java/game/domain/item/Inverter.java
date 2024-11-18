@@ -1,10 +1,11 @@
 package game.domain.item;
 
-import game.domain.bullet.Bullet;
+import static game.domain.item.ItemType.INVERTER;
+
 import game.domain.bullet.Bullets;
 import game.dto.ItemUsageRequestDto;
 
-public class Inverter implements Item{
+public class Inverter implements Item {
     @Override
     public ItemUsageRequestDto useItem(ItemUsageRequestDto itemUsageRequestDto) {
         Bullets newBullets = itemUsageRequestDto.gameDataDto().bullets().invertFirstBullet();
@@ -13,5 +14,10 @@ public class Inverter implements Item{
                         .gameDataDto()
                         .changeBullets(newBullets))
                 .reduceCasterItem(this);
+    }
+
+    @Override
+    public String toString() {
+        return INVERTER.getName();
     }
 }

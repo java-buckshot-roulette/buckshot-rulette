@@ -73,4 +73,8 @@ public class Bullets {
                 .map(Bullet::toString)
                 .collect(Collectors.joining(", ")) + "]";
     }
+
+    public Bullet CheckFirstBullet() {
+        return values.getFirst();
+    }
 }

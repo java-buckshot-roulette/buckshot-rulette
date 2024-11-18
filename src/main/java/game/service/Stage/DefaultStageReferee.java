@@ -5,19 +5,22 @@ import static game.service.Stage.GameResult.*;
 import static game.service.Stage.GameResult.GAME_OVER;
 
 import game.config.StageDependency;
+import game.domain.healthpoint.HealthPoint;
 import game.dto.PlayerDataDto;
 
 public class DefaultStageReferee implements StageReferee {
+    private static final HealthPoint ZERO_HEALTH = new HealthPoint(0);
 
     @Override
     public GameResult judgeGameResult(PlayerDataDto challenger, PlayerDataDto dealer, StageDependency stageDependency) {
-        if (challenger.lifeAndDeath().equals(DEATH)) {
+        if (challenger.lifeAndDeath().equals(DEATH) || challenger.healthPoint().equals(ZERO_HEALTH)) {
             return GAME_OVER;
         }
-        if (dealer.lifeAndDeath().equals(DEATH) && stageDependency.isFinalStage()) {
+        if ((dealer.healthPoint().equals(ZERO_HEALTH) || dealer.lifeAndDeath().equals(DEATH))
+                && stageDependency.isFinalStage()) {
             return GAME_CLEAR;
         }
-        if (dealer.lifeAndDeath().equals(DEATH)) {
+        if (dealer.lifeAndDeath().equals(DEATH) || dealer.healthPoint().equals(ZERO_HEALTH)) {
             return GO_NEXT_STAGE;
         }
         return ONGOING;
