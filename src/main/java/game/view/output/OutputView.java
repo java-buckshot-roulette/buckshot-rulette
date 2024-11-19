@@ -1,6 +1,7 @@
 package game.view.output;
 
 import game.dto.PlayerDataDto;
+import game.service.Stage.GameResult;
 import game.util.Timer;
 
 public class OutputView {
@@ -34,9 +35,9 @@ public class OutputView {
     }
 
     public void printStage(int stageNumber) {
-        println("\n#########################");
-        println("##      " + stageNumber + "스테이지" + "      ##");
-        println("#########################\n");
+        println("\n################################");
+        println("###        " + stageNumber + " 스테이지" + "        ###");
+        println("################################\n");
         Timer.delay(1000);
     }
 
@@ -72,5 +73,14 @@ public class OutputView {
         Timer.delay(1000);
         println("장전완료!\n");
         Timer.delay(2000);
+    }
+
+    public void printResult(GameResult result) {
+        if (result.equals(GameResult.GAME_CLEAR)) {
+            println("축하합니다!");
+        } else {
+            println("당신은 죽었습니다..");
+        }
+        Timer.delay(1000);
     }
 }

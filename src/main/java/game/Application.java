@@ -8,11 +8,9 @@ import game.config.StageConfig;
 import game.config.StageDependency;
 import game.controller.GameController;
 import game.service.Stage.GameResult;
-import game.view.input.InputView;
 import game.view.output.OutputView;
 
 public class Application {
-
     private OutputView outputView = new OutputView();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -36,12 +34,8 @@ public class Application {
             }
 
             if(result != null) {
-                if (result.equals(GameResult.GAME_CLEAR)) {
-                    outputView.println("축하합니다!");
-                } else {
-                    outputView.println("당신은 죽었습니다..");
-                }
-                break;
+                outputView.printResult(result);
+                outputView.printMenu();
             }
         }
     }
