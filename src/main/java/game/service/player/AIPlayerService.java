@@ -58,23 +58,27 @@ public class AIPlayerService implements PlayerService {
 
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
         Item item;
-        ItemUsageRequestDto newitemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
-        while(!(item = decideItem(newitemUsageRequestDto, gameStateDto)).equals(SHOT_GUN.getInstance())) {
-            printUsingItem(item);
+        ItemUsageRequestDto newitemUsageRequestDto = new ItemUsageRequestDto(
+                                                    player.makePlayerDataDto(), // 1. caster 
+                                                    rival,                      // 2. target
+                                                    gameStateDto);              // 3. game data (탄환 & 턴 정보)
+
+        while(!(item = decideItem(newitemUsageRequestDto)).equals(SHOT_GUN.getInstance())) {
+            newitemUsageRequestDto = item.useItem(newitemUsageRequestDto);
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
                 nextBullet = gameStateDto.bullets().CheckFirstBullet();
             }
-            newitemUsageRequestDto = item.useItem(makeTargetingRival(rival, gameStateDto));
-            return makeTargetingRival(newitemUsageRequestDto);
+            printUsingItem(item);
+            return updatedData(newitemUsageRequestDto);
         }
-        printUsingItem(item);
-        return useShotGun(item, rival, gameStateDto);
+        return useShotGun(item, newitemUsageRequestDto);
     }
 
-    private Item decideItem(ItemUsageRequestDto itemUsageRequestDto, GameStateDto gameStateDto) {
+    private Item decideItem(ItemUsageRequestDto itemUsageRequestDto) {
         outputView.printPlayerState(itemUsageRequestDto.caster(), itemUsageRequestDto.target()); 
-        Item item = SHOT_GUN.getInstance();
-
+        Item item = SHOT_GUN.getInstance(); // 테스트용 코드 (항상 샷건 사용)
+        
+        // A.I. 작동 로직
         // TODO: gameStateDto.bullets()를 통해 가져온 (실탄 / 공포탄) 수를 통해 행동 방식 결정
         /*
          * 1. 맥주
@@ -89,79 +93,56 @@ public class AIPlayerService implements PlayerService {
         return item;
     }
 
-    private ItemUsageResponseDto useShotGun(Item shotGun, PlayerDataDto rival, GameStateDto gameStateDto) {
-        int firstBulletDamage = gameStateDto.bullets().getFirstBulletDamage();
-        // 다음 발사될 탄을 알고 있는 경우
-        if((nextBullet != null && nextBullet.equals(RED))) {
-            return shootAtRival(shotGun, rival, gameStateDto, firstBulletDamage);
-        }
-        if((nextBullet != null && nextBullet.equals(BLUE))) {
-            return shootAtMe(shotGun, rival, gameStateDto, firstBulletDamage);   
-        }
+    private ItemUsageResponseDto useShotGun(Item shotGun, ItemUsageRequestDto itemUsageRequestDto) {
+        GameStateDto state = itemUsageRequestDto.gameDataDto();
 
-        // TODO: gameStateDto.bullets()를 통해 (실탄 / 공포탄) 수를 가져로도록 구현하기
-        // 다음 발사될 탄을 모르는 경우, 남아있는 (실탄 / 공포탄) 수에 따라 결정
-        // if(red >= blue) {
-        //     return shootAtRival(shotGun, rival, gameStateDto, firstBulletDamage);
-        // }
-        return shootAtMe(shotGun, rival, gameStateDto, firstBulletDamage);
+        int firstBulletDamage = state.bullets().getFirstBulletDamage();
+
+        int redCount = state.bullets().getRedBulletCount();
+        int blueCount = state.bullets().getBlueBulletCount();
+
+        printUsingItem(shotGun);
+
+        ItemUsageResponseDto result = null;
+        if((nextBullet != null && nextBullet.equals(RED))) {                        
+            result = shootAtRival(shotGun, firstBulletDamage, itemUsageRequestDto); // 1. 실탄 확정: 상대방을 공격
+        } else if((nextBullet != null && nextBullet.equals(BLUE))) {                
+            result = shootAtMe(shotGun, firstBulletDamage, itemUsageRequestDto);    // 2. 공포탄 확정: 자신을 공격
+        } else if(redCount >= blueCount) {                                                    
+            result = shootAtRival(shotGun, firstBulletDamage, itemUsageRequestDto); // 3. 실탄이 더 많은 경우: 상대방을 공격
+        } else {                                                                    
+            result = shootAtMe(shotGun, firstBulletDamage, itemUsageRequestDto);    // 4. 공포탄이 더 많은 경우: 자신을 공격
+        }
+        
+        return result;
     }
 
-    private ItemUsageResponseDto shootAtMe(Item shotGun, PlayerDataDto rival, 
-                                            GameStateDto gameStateDto, int firstBulletDamage) {
-        outputView.println("딜러가 자신을 향해 총을 겨눕니다!");
-        Timer.delay(1000);
-        printResultOfShot(firstBulletDamage);
-        ItemUsageRequestDto targetingMe = shotGun.useItem(
-                new ItemUsageRequestDto(player.makePlayerDataDto(), 
-                                        player.makePlayerDataDto(), 
-                                        gameStateDto));
-        return makeTargetingMe(rival, targetingMe.target(), targetingMe.gameDataDto());
-    }
-
-    private ItemUsageResponseDto shootAtRival(Item shotGun, PlayerDataDto rival, 
-                                                GameStateDto gameStateDto, int firstBulletDamage) {
+    private ItemUsageResponseDto shootAtRival(Item shotGun, int firstBulletDamage,
+                                                ItemUsageRequestDto itemUsageRequestDto) {
         outputView.println("딜러가 당신을 향해 총을 겨눕니다!");
-        Timer.delay(1000);
+        ItemUsageRequestDto shootRival = shotGun.useItem(itemUsageRequestDto);
         printResultOfShot(firstBulletDamage);
-        ItemUsageRequestDto targetingRival = shotGun.useItem(
-                new ItemUsageRequestDto(player.makePlayerDataDto(), rival, gameStateDto));
-        return makeTargetingRival(targetingRival);
+        return updatedData(shootRival);
     }
 
-    /**
-     * 아이템 사용 요청 dto 생성
-     *
-     * @param rival        효과를 적용할 상대
-     * @param gameStateDto 현재 게임 상태
-     * @return 아이템 사용 요청 dto
-     */
-    private ItemUsageRequestDto makeTargetingRival(PlayerDataDto rival, GameStateDto gameStateDto) {
-        return new ItemUsageRequestDto(player.makePlayerDataDto(), rival, gameStateDto);
+    private ItemUsageResponseDto shootAtMe(Item shotGun, int firstBulletDamage, 
+                                            ItemUsageRequestDto itemUsageRequestDto) {
+        outputView.println("딜러가 자신을 향해 총을 겨눕니다!");              
+        // 1. 타겟을 자신으로 변경
+        ItemUsageRequestDto targetMe = itemUsageRequestDto.changeTargetData(itemUsageRequestDto.caster());
+        // 2. 격발
+        ItemUsageRequestDto shootMe = shotGun.useItem(targetMe);
+        // 3. 자신의 상태 갱신 / 타겟을 원래대로 변경
+        shootMe = shootMe.changeCasterData(shootMe.target())
+                         .changeTargetData(itemUsageRequestDto.target());
+
+        printResultOfShot(firstBulletDamage);
+        return updatedData(shootMe);
     }
 
-    /**
-     * 아이템을 상대방에게 적용한 아이템 사용 결과 반환. 아이템을 사용한 후 나의 정보도 갱신한다.
-     *
-     * @param targetingRival 아이템을 적용했던 요청
-     * @return 아이템을 적용한 후 상태의 response
-     */
-    private ItemUsageResponseDto makeTargetingRival(ItemUsageRequestDto targetingRival) {
-        applyPlayerDataDto(targetingRival.caster());    //나의 정보 갱신
-        return new ItemUsageResponseDto(targetingRival.target(), targetingRival.gameDataDto());
-    }
-
-    /**
-     * 아이템을 나에게 사용했을 때 나의 정보를 갱신하고, ItemResponse 반환 ex) 샷건을 나에게 쏘았을 때
-     *
-     * @param rival        상대
-     * @param caster       아이템 사용 후 나
-     * @param gameStateDto 아이템 사용 후 상태
-     * @return 아이템 사용 후 ItemResponse
-     */
-    private ItemUsageResponseDto makeTargetingMe(PlayerDataDto rival, PlayerDataDto caster, GameStateDto gameStateDto) {
-        applyPlayerDataDto(caster);
-        return new ItemUsageResponseDto(rival, gameStateDto);
+    private ItemUsageResponseDto updatedData(ItemUsageRequestDto itemUsageRequestDto) {
+        applyPlayerDataDto(itemUsageRequestDto.caster());
+        return new ItemUsageResponseDto(itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
     }
 
     /**
@@ -179,6 +160,7 @@ public class AIPlayerService implements PlayerService {
      * @param damage 탄환 데미지
      */
     private void printResultOfShot(int damage) {
+        Timer.delay(1000);
         outputView.println("\n철컥...\n");
         Timer.delay(1000);
         if (damage == 0) {
