@@ -72,23 +72,23 @@ public class GameController {
                 initializeStage();
             }
 
-            // 탄을 재장전할 때
-            // 1. 턴을 초기화
-            // 2. 아이템을 플레이어들에게 나눠줌
             if (bullets.isEmpty()) {
                 prepareForRound();
             }
 
             proceedGameTurn();
 
-            tryToBreakDefibrillator();
             tryUsingDefibrillation();
+            tryToBreakDefibrillator();
 
             gameState = stageReferee.judgeGameResult(challengerService.requestPlayerDataDto(),
                     dealerService.requestPlayerDataDto(), stageDependency);
 
         } while (gameState.equals(ONGOING) || gameState.equals(GO_NEXT_STAGE));
+    }
 
+    private void printStage() {
+        outputView.printStage(stageDependency.getStageNumber());
     }
 
     private void tryToBreakDefibrillator() {
@@ -97,18 +97,25 @@ public class GameController {
     }
 
     private void tryUsingDefibrillation() {
-        challengerService.applyPlayerDataDto(defibrillator.tryUsingChallengerDefibrillator(challengerService.requestPlayerDataDto()));
+        challengerService.applyPlayerDataDto(
+                defibrillator.tryUsingChallengerDefibrillator(challengerService.requestPlayerDataDto()));
 
-        dealerService.applyPlayerDataDto(defibrillator.tryUsingDealersDefibrillator(dealerService.requestPlayerDataDto()));
+        dealerService.applyPlayerDataDto(
+                defibrillator.tryUsingDealersDefibrillator(dealerService.requestPlayerDataDto()));
     }
 
     private void initializeStage() {
-        prepareForRound();
+        printStage();
+
         defibrillator.initializeDefibrillator();
         challengerService.initializePlayer(stageDependency);
         dealerService.initializePlayer(stageDependency);
+        prepareForRound();
     }
 
+    /**
+     * 라운드 -> 탄을 재장전하는 단위 1. 탄을 재장전 2. 아이템을 플레이어들에게 나눠줌 3. 게임 턴을 초기화 (라운드 시작 시 항상 도전자가 먼저 아이템을 사용)
+     */
     private void prepareForRound() {
         bullets.reload(bulletGenerator.generateBullet(Randoms.pickNumberInRange(3, 8)));
         printBullets();
@@ -116,6 +123,9 @@ public class GameController {
         handOutItems();
     }
 
+    /**
+     * 게임 턴 진행 턴 -> 한 사람이 아이템을 사용해서부터 총 쏘기 까지
+     */
     private void proceedGameTurn() {
         if (turnService.getTurn().equals(Role.CHALLENGER)) {
             proceedPlayerTurn();
@@ -135,17 +145,19 @@ public class GameController {
     }
 
     private void proceedPlayerTurn() {
+        outputView.println("***플레이어 턴***");
         ItemUsageResponseDto itemUsageResponseDto = challengerService.useItem(dealerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(dealerService, itemUsageResponseDto.target());
-        applyGameStateDataDto(itemUsageResponseDto.gameStateDto());
+        applyGameStateDataDto(itemUsageResponseDto.gameStateDto().passTurn());
     }
 
     private void proceedDealerTurn() {
+        outputView.println("***딜러 턴***");
         ItemUsageResponseDto itemUsageResponseDto = dealerService.useItem(challengerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(challengerService, itemUsageResponseDto.target());
-        applyGameStateDataDto(itemUsageResponseDto.gameStateDto());
+        applyGameStateDataDto(itemUsageResponseDto.gameStateDto().passTurn());
 
     }
 
@@ -163,29 +175,6 @@ public class GameController {
     }
 
     private void printBullets() {
-        outputView.println(bullets.toString());
+        outputView.printBullet(bullets.toString());
     }
-
-    public static void main(String[] args) {
-        OutputView outputView = new OutputView();
-        InputView inputView = new InputView(outputView);
-        PlayerService playerService = new DefaultPlayerService(
-                new Player(Role.CHALLENGER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView);
-        PlayerService dealerService = new DefaultPlayerService(
-                new Player(Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView);
-        BulletGenerator bulletGenerator = new DefaultBulletGenerator();
-        ItemGenerator itemGenerator = new DefaultItemGenerator();
-        StageReferee stageReferee = new DefaultStageReferee();
-        TurnService turnService = new DefaultTurnService(new ArrayList<>());
-        Bullets bullets = new Bullets(new ArrayList<>());
-        StageDependency stageDependency = StageDependency.THIRD;
-        GameController gameController = new GameController(playerService, dealerService, bulletGenerator, itemGenerator,
-                stageReferee, turnService, bullets, stageDependency, inputView, outputView);
-
-        gameController.run();
-    }
-
-
 }

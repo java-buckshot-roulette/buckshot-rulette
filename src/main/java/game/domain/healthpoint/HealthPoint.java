@@ -34,4 +34,9 @@ public class HealthPoint {
     public int hashCode() {
         return Objects.hashCode(value);
     }
+
+    @Override
+    public String toString() {
+        return "❤".repeat(value);
+    }
 }

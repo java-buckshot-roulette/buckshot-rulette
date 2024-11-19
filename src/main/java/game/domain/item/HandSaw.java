@@ -1,5 +1,7 @@
 package game.domain.item;
 
+import static game.domain.item.ItemType.HAND_CUFFS;
+
 import game.domain.bullet.Bullets;
 import game.dto.ItemUsageRequestDto;
 
@@ -19,5 +21,10 @@ public class HandSaw implements Item {
                 .gameDataDto()
                 .bullets()
                 .StrengthenFirstBullet();
+    }
+
+    @Override
+    public String toString() {
+        return HAND_CUFFS.getName();
     }
 }

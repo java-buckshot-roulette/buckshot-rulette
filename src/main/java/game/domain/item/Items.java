@@ -2,6 +2,7 @@ package game.domain.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Items {
     private static final int MAX_SIZE = 8;
@@ -10,7 +11,6 @@ public class Items {
     public Items(List<Item> items) {
         this.values = items;
     }
-
 
     public Items add(Items items) {
         List<Item> combined = new ArrayList<>(values);
@@ -31,5 +31,12 @@ public class Items {
         List<Item> newValues = new ArrayList<>(values);
         newValues.remove(item);
         return new Items(newValues);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + values.stream()
+                .map(Item::toString)
+                .collect(Collectors.joining(", ")) + "]";
     }
 }

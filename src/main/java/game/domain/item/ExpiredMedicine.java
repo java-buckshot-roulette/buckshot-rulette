@@ -1,5 +1,7 @@
 package game.domain.item;
 
+import static game.domain.item.ItemType.EXPIRED_MEDICINE;
+
 import game.domain.healthpoint.HealthPoint;
 import game.dto.ItemUsageRequestDto;
 import game.util.Randoms;
@@ -23,9 +25,13 @@ public class ExpiredMedicine implements Item {
         }
 
         return itemUsageRequestDto.changeCasterData(itemUsageRequestDto
-                        .caster()
-                        .discountHealthPoint(DISCOUNT_POINT));
+                .caster()
+                .discountHealthPoint(DISCOUNT_POINT));
 
     }
 
+    @Override
+    public String toString() {
+        return EXPIRED_MEDICINE.getName();
+    }
 }
