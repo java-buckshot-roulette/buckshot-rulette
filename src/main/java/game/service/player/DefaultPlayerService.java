@@ -147,7 +147,7 @@ public class DefaultPlayerService implements PlayerService {
                 .items()
                 .toString();
 
-        outputView.printPlayerState(itemUsageRequestDto.caster(), itemUsageRequestDto.target());
+        outputView.printPlayerState(itemUsageRequestDto.target(), itemUsageRequestDto.caster());
         return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
     }
 
