@@ -72,6 +72,7 @@ public class DefaultPlayerService implements PlayerService {
                 return useShotGun(item, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
             }
             // 아이템 사용
+            printUsingItem(item);
             itemUsageRequestDto = item.useItem(itemUsageRequestDto);
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
                 printFirstBullet(gameState.bullets().CheckFirstBullet());
@@ -150,7 +151,12 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private void printFirstBullet(Bullet bullet) {
-        outputView.println("\n첫번째 탄환은..." + bullet.toString() + "\n");
+        outputView.println("첫번째 탄환은..." + bullet.toString() + "\n");
+        Timer.delay(1000);
+    }
+
+    private void printUsingItem(Item item) {
+        outputView.println("\n" + item.toString() + "을(를) 사용합니다.\n");
         Timer.delay(1000);
     }
 }
