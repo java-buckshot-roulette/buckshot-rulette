@@ -57,18 +57,27 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
-        Item item;
-        ItemUsageRequestDto newitemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
-        //Todo: 가지고 있지 않은 아이템을 입력 시 제대로 된 아이템 입력할 때까지 반복 입력
-        while (!(item = readItem(newitemUsageRequestDto)).equals(ItemType.SHOT_GUN.getInstance())) {
+        ItemUsageRequestDto itemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
+
+        while (true) {
+            Item item = readItem(itemUsageRequestDto);
+
+            // 샷건 아이템이 입력되면 처리 후 반환
+            if (item.equals(ItemType.SHOT_GUN.getInstance())) {
+                applyPlayerDataDto(itemUsageRequestDto.caster());
+                return useShotGun(item, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
+            }
+
+            // 돋보기 사용
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
                 printFirstBullet(gameStateDto.bullets().CheckFirstBullet());
             }
-            newitemUsageRequestDto = item.useItem(makeTargetingRival(rival, gameStateDto));
-            return makeTargetingRival(newitemUsageRequestDto);
+
+            // 아이템 사용 후 다음 요청 DTO 업데이트
+            itemUsageRequestDto = item.useItem(itemUsageRequestDto);
         }
-        return useShotGun(item, rival, gameStateDto);
     }
+
 
     private ItemUsageResponseDto useShotGun(Item shotGun, PlayerDataDto rival, GameStateDto gameStateDto) {
         String shotPerson = inputView.askPersonToBeShot();
@@ -143,7 +152,7 @@ public class DefaultPlayerService implements PlayerService {
                 .items()
                 .toString();
 
-        outputView.printPlayerState(itemUsageRequestDto.caster(), itemUsageRequestDto.target());
+        outputView.printPlayerState(itemUsageRequestDto.target(), itemUsageRequestDto.caster());
         return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
     }
 

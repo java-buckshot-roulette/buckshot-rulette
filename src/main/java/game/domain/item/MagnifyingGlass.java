@@ -14,4 +14,9 @@ public class MagnifyingGlass implements Item {
     public String toString() {
         return MAGNIFYING_GLASS.getName();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && getClass() == o.getClass();
+    }
 }
