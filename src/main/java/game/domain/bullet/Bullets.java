@@ -47,6 +47,18 @@ public class Bullets {
         return new ArrayList<>(values);
     }
 
+    public int getRedBulletCount() {
+        return (int) values.stream()
+                .filter(Bullet::isRed)
+                .count();
+    }
+
+    public int getBlueBulletCount() {
+        return (int) values.stream()
+                .filter(Bullet::isBlue)
+                .count();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

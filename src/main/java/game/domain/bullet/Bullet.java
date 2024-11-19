@@ -31,6 +31,14 @@ public class Bullet {
         return damage;
     }
 
+    public boolean isRed() {
+        return type.equals(Type.RED);
+    }
+
+    public boolean isBlue() {
+        return type.equals(Type.BLUE);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
