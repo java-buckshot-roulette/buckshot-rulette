@@ -20,7 +20,7 @@ public class HandSaw implements Item {
         return itemUsageRequestDto
                 .gameDataDto()
                 .bullets()
-                .StrengthenFirstBullet();
+                .strengthenFirstBullet();
     }
 
     @Override

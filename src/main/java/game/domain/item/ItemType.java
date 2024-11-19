@@ -10,6 +10,7 @@ public enum ItemType {
     CIGARETTE_PACK(new CigarettePack(), "담배"),
     EXPIRED_MEDICINE(new ExpiredMedicine(), "상한약"),
     HAND_CUFFS(new Handcuffs(), "수갑"),
+    HAND_SAW(new HandSaw(), "쇠톱"),
     INVERTER(new Inverter(), "인버터"),
     MAGNIFYING_GLASS(new MagnifyingGlass(), "돋보기"),
     SHOT_GUN(new ShotGun(), "총");
