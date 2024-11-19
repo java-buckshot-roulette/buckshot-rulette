@@ -59,23 +59,23 @@ public class DefaultPlayerService implements PlayerService {
 
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
         ItemUsageRequestDto itemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
-
         while (true) {
+            // 탄환 소진 여부 확인
+            GameStateDto gameState = itemUsageRequestDto.gameDataDto();
+            if(gameState.bullets().isEmpty()) {
+                return makeTargetingRival(itemUsageRequestDto);
+            }
+            // 샷건 입력 여부 확인
             Item item = readItem(itemUsageRequestDto);
-
-            // 샷건 아이템이 입력되면 처리 후 반환
             if (item.equals(ItemType.SHOT_GUN.getInstance())) {
                 applyPlayerDataDto(itemUsageRequestDto.caster());
                 return useShotGun(item, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
             }
-
-            // 돋보기 사용
-            if (item.equals(MAGNIFYING_GLASS.getInstance())) {
-                printFirstBullet(gameStateDto.bullets().CheckFirstBullet());
-            }
-
-            // 아이템 사용 후 다음 요청 DTO 업데이트
+            // 아이템 사용
             itemUsageRequestDto = item.useItem(itemUsageRequestDto);
+            if (item.equals(MAGNIFYING_GLASS.getInstance())) {
+                printFirstBullet(gameState.bullets().CheckFirstBullet());
+            }
         }
     }
 

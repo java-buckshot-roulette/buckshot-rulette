@@ -11,6 +11,7 @@ import game.domain.Player;
 import game.domain.bullet.Bullet;
 import game.config.StageDependency;
 import game.domain.item.Item;
+import game.domain.item.ItemType;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
@@ -57,21 +58,28 @@ public class AIPlayerService implements PlayerService {
     }
 
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
-        Item item;
         ItemUsageRequestDto newitemUsageRequestDto = new ItemUsageRequestDto(
                                                     player.makePlayerDataDto(), // 1. caster 
                                                     rival,                      // 2. target
                                                     gameStateDto);              // 3. game data (탄환 & 턴 정보)
-
-        while(!(item = decideItem(newitemUsageRequestDto)).equals(SHOT_GUN.getInstance())) {
+        while(true) {
+            // 탄환 소진 여부 확인
+            GameStateDto state = newitemUsageRequestDto.gameDataDto();
+            if(state.bullets().isEmpty()) {
+                return updatedData(newitemUsageRequestDto);
+            }
+            // 샷건 발사 여부 확인
+            Item item = decideItem(newitemUsageRequestDto);
+            if (item.equals(ItemType.SHOT_GUN.getInstance())) {
+                return useShotGun(item, newitemUsageRequestDto);
+            }
+            // 아이템 사용
             newitemUsageRequestDto = item.useItem(newitemUsageRequestDto);
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
                 nextBullet = gameStateDto.bullets().CheckFirstBullet();
             }
             printUsingItem(item);
-            return updatedData(newitemUsageRequestDto);
         }
-        return useShotGun(item, newitemUsageRequestDto);
     }
 
     private Item decideItem(ItemUsageRequestDto itemUsageRequestDto) {
@@ -113,7 +121,7 @@ public class AIPlayerService implements PlayerService {
         } else {                                                                    
             result = shootAtMe(shotGun, firstBulletDamage, itemUsageRequestDto);    // 4. 공포탄이 더 많은 경우: 자신을 공격
         }
-        
+
         return result;
     }
 
