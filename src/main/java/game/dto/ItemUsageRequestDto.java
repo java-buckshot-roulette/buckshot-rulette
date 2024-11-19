@@ -17,7 +17,7 @@ public record ItemUsageRequestDto(PlayerDataDto caster, PlayerDataDto target, Ga
 
     public ItemUsageRequestDto reduceCasterItem(Item item) {
         PlayerDataDto newCaster = this.caster;
-        newCaster.reduceItem(item);
+        newCaster = newCaster.reduceItem(item);
         return new ItemUsageRequestDto(newCaster, this.target, this.gameDataDto);
     }
 }
