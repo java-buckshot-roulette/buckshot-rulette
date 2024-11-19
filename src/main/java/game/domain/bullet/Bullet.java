@@ -39,6 +39,10 @@ public class Bullet {
         return type.equals(Type.BLUE);
     }
 
+    public Bullet copy() {
+        return new Bullet(type, damage);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
