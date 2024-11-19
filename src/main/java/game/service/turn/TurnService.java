@@ -11,4 +11,7 @@ public interface TurnService {
     List<Role> requestTurns();
 
     void applyTurns(List<Role> turns);
+
+    void proceedTurn(TurnAction turnAction);
+
 }
