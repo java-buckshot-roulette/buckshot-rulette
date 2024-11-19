@@ -86,7 +86,7 @@ public class GameController {
                     dealerService.requestPlayerDataDto(), stageDependency);
 
         } while (gameState.equals(ONGOING) || gameState.equals(GO_NEXT_STAGE));
-        
+
         return gameState;
     }
 
@@ -147,7 +147,7 @@ public class GameController {
     }
 
     private void proceedPlayerTurn() {
-        outputView.println("\n########  플레이어 턴  ########\n");
+        outputView.println("\n#######   플레이어 턴   #######\n");
         ItemUsageResponseDto itemUsageResponseDto = challengerService.useItem(dealerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(dealerService, itemUsageResponseDto.target());
