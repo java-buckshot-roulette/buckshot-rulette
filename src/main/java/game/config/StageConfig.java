@@ -13,6 +13,7 @@ import game.service.bullet.BulletGenerator;
 import game.service.bullet.DefaultBulletGenerator;
 import game.service.item.DefaultItemGenerator;
 import game.service.item.ItemGenerator;
+import game.service.player.AIPlayerService;
 import game.service.player.DefaultPlayerService;
 import game.service.player.PlayerService;
 import game.service.turn.DefaultTurnService;
@@ -31,9 +32,9 @@ public class StageConfig {
                 new Player(Role.CHALLENGER, new Items(new ArrayList<>()), new HealthPoint(0),
                         LifeAndDeath.LIFE), inputView, outputView);
 
-        PlayerService dealerService = new DefaultPlayerService(
+        PlayerService dealerService = new AIPlayerService(
                 new Player(Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView, outputView);
+                        LifeAndDeath.LIFE), outputView);
 
         BulletGenerator bulletGenerator = new DefaultBulletGenerator();
 
