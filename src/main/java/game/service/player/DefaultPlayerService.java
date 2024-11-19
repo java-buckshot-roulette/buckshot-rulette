@@ -13,6 +13,7 @@ import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
 import game.util.Convertor;
+import game.util.Timer;
 import game.view.input.InputView;
 import game.view.output.OutputView;
 import java.util.List;
@@ -90,11 +91,17 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private void printResultOfShot(int damage) {
+        outputView.println("\n철컥...\n");
+
+        Timer.delay(1000);
+        
         if (damage == 0) {
-            outputView.println("...틱 공포탄 입니다.");
+            outputView.println("...틱 공포탄 입니다.\n");
             return;
         }
-        outputView.println("...빵! 실탄 입니다.");
+        outputView.println("...빵! 실탄 입니다.\n");
+
+        Timer.delay(1000);
     }
 
     /**
@@ -148,6 +155,7 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private void printFirstBullet(Bullet bullet) {
-        outputView.println("첫번째 탄환은..." + bullet.toString());
+        outputView.println("\n첫번째 탄환은..." + bullet.toString() + "\n");
+        Timer.delay(1000);
     }
 }

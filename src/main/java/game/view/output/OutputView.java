@@ -1,11 +1,12 @@
 package game.view.output;
 
 import game.dto.PlayerDataDto;
+import game.util.Timer;
 
 public class OutputView {
 
     public void printPersonToBeShot() {
-        println("누구를 겨냥 할지 입력해 주세요. (예: 나/상대)");
+        println("\n누구를 겨냥 할지 입력해 주세요. (예: 나/상대)");
     }
 
     public void println(String message) {
@@ -13,13 +14,13 @@ public class OutputView {
     }
 
     public void printItemReadMessage() {
-        println("사용할 아이템을 입력해 주세요.");
+        println("사용할 아이템을 입력해 주세요. (ex1: 돋보기 / ex2: 총)");
     }
 
     public void printStage(int stageNumber) {
-        println("-----------");
-        println(stageNumber + "스테이지");
-        println("-----------\n");
+        println("#########################");
+        println("##      " + stageNumber + "스테이지" + "      ##");
+        println("#########################");
     }
 
     public void printPlayerState(PlayerDataDto dealer, PlayerDataDto challenger) {
@@ -40,14 +41,19 @@ public class OutputView {
     }
 
     public void printPlayersItems(String dealerItems, String challengerItems) {
-        println("아이템 목록\n\n" + "딜러");
+        println("----  아이템 목록  ----\n");
+        println("딜러");
         println(dealerItems + "\n");
         println("플레이어");
         println(challengerItems + "\n");
+        println("-----------------------\n");
     }
 
     public void printBullet(String bullets) {
         println(bullets);
-        println("무작위로 섞는 중...\n\n장전완료!\n");
+        println("무작위로 섞는 중...\n");
+        Timer.delay(1000);
+        println("장전완료!\n");
+        Timer.delay(1000);
     }
 }

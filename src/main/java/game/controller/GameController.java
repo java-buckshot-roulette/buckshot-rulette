@@ -22,6 +22,7 @@ import game.service.bullet.BulletGenerator;
 import game.service.bullet.DefaultBulletGenerator;
 import game.service.item.DefaultItemGenerator;
 import game.service.item.ItemGenerator;
+import game.service.player.AIPlayerService;
 import game.service.player.DefaultPlayerService;
 import game.service.player.PlayerService;
 import game.service.turn.DefaultTurnService;
@@ -106,7 +107,6 @@ public class GameController {
 
     private void initializeStage() {
         printStage();
-
         defibrillator.initializeDefibrillator();
         challengerService.initializePlayer(stageDependency);
         dealerService.initializePlayer(stageDependency);
@@ -145,7 +145,7 @@ public class GameController {
     }
 
     private void proceedPlayerTurn() {
-        outputView.println("***플레이어 턴***");
+        outputView.println("######  플레이어 턴  ######\n");
         ItemUsageResponseDto itemUsageResponseDto = challengerService.useItem(dealerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(dealerService, itemUsageResponseDto.target());
@@ -153,7 +153,7 @@ public class GameController {
     }
 
     private void proceedDealerTurn() {
-        outputView.println("***딜러 턴***");
+        outputView.println("######    딜러 턴   ######\n");
         ItemUsageResponseDto itemUsageResponseDto = dealerService.useItem(challengerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(challengerService, itemUsageResponseDto.target());
@@ -192,12 +192,10 @@ public class GameController {
         StageReferee stageReferee = new DefaultStageReferee();
         TurnService turnService = new DefaultTurnService(new ArrayList<>());
         Bullets bullets = new Bullets(new ArrayList<>());
-        StageDependency stageDependency = StageDependency.THIRD;
+        StageDependency stageDependency = StageDependency.FIRST;
         GameController gameController = new GameController(playerService, dealerService, bulletGenerator, itemGenerator,
                 stageReferee, turnService, bullets, stageDependency, inputView, outputView);
-
+        
         gameController.run();
     }
-
-
 }
