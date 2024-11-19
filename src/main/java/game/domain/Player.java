@@ -49,4 +49,5 @@ public class Player {
         return new Player(role, new Items(new ArrayList<>()), healthPoint, lifeAndDeath);
     }
 
+
 }

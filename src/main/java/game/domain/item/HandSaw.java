@@ -1,6 +1,6 @@
 package game.domain.item;
 
-import static game.domain.item.ItemType.HAND_CUFFS;
+import static game.domain.item.ItemType.HAND_SAW;
 
 import game.domain.bullet.Bullets;
 import game.dto.ItemUsageRequestDto;
@@ -20,11 +20,16 @@ public class HandSaw implements Item {
         return itemUsageRequestDto
                 .gameDataDto()
                 .bullets()
-                .StrengthenFirstBullet();
+                .strengthenFirstBullet();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && getClass() == o.getClass();
     }
 
     @Override
     public String toString() {
-        return HAND_CUFFS.getName();
+        return HAND_SAW.getName();
     }
 }

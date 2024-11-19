@@ -13,6 +13,7 @@ import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
 import game.util.Convertor;
+import game.util.Timer;
 import game.view.input.InputView;
 import game.view.output.OutputView;
 import java.util.List;
@@ -57,18 +58,27 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
-        Item item;
-        ItemUsageRequestDto newitemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
-        //Todo: 가지고 있지 않은 아이템을 입력 시 제대로 된 아이템 입력할 때까지 반복 입력
-        while (!(item = readItem(newitemUsageRequestDto)).equals(ItemType.SHOT_GUN.getInstance())) {
-            if (item.equals(MAGNIFYING_GLASS.getInstance())) {
-                printFirstBullet(gameStateDto.bullets().CheckFirstBullet());
+        ItemUsageRequestDto itemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
+        while (true) {
+            // 탄환 소진 여부 확인
+            GameStateDto gameState = itemUsageRequestDto.gameDataDto();
+            if(gameState.bullets().isEmpty()) {
+                return makeTargetingRival(itemUsageRequestDto);
             }
-            newitemUsageRequestDto = item.useItem(makeTargetingRival(rival, gameStateDto));
-            return makeTargetingRival(newitemUsageRequestDto);
+            // 샷건 입력 여부 확인
+            Item item = readItem(itemUsageRequestDto);
+            if (item.equals(ItemType.SHOT_GUN.getInstance())) {
+                applyPlayerDataDto(itemUsageRequestDto.caster());
+                return useShotGun(item, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
+            }
+            // 아이템 사용
+            itemUsageRequestDto = item.useItem(itemUsageRequestDto);
+            if (item.equals(MAGNIFYING_GLASS.getInstance())) {
+                printFirstBullet(gameState.bullets().CheckFirstBullet());
+            }
         }
-        return useShotGun(item, rival, gameStateDto);
     }
+
 
     private ItemUsageResponseDto useShotGun(Item shotGun, PlayerDataDto rival, GameStateDto gameStateDto) {
         String shotPerson = inputView.askPersonToBeShot();
@@ -90,11 +100,14 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private void printResultOfShot(int damage) {
+        outputView.println("\n철컥...\n");
+        Timer.delay(1000);
         if (damage == 0) {
-            outputView.println("...틱 공포탄 입니다.");
-            return;
+            outputView.println("...틱 공포탄 입니다.\n");
+        } else {
+            outputView.println("...빵! 실탄 입니다.\n");
         }
-        outputView.println("...빵! 실탄 입니다.");
+        Timer.delay(2000);
     }
 
     /**
@@ -143,11 +156,12 @@ public class DefaultPlayerService implements PlayerService {
                 .items()
                 .toString();
 
-        outputView.printPlayerState(itemUsageRequestDto.caster(), itemUsageRequestDto.target());
+        outputView.printPlayerState(itemUsageRequestDto.target(), itemUsageRequestDto.caster());
         return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
     }
 
     private void printFirstBullet(Bullet bullet) {
-        outputView.println("첫번째 탄환은..." + bullet.toString());
+        outputView.println("\n첫번째 탄환은..." + bullet.toString() + "\n");
+        Timer.delay(1000);
     }
 }

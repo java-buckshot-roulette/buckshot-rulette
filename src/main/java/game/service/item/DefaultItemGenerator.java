@@ -4,6 +4,7 @@ import static game.domain.item.ItemConfig.BEAR;
 import static game.domain.item.ItemConfig.CIGARETTE_PACK;
 import static game.domain.item.ItemConfig.EXPIRED_MEDICINE;
 import static game.domain.item.ItemConfig.HAND_CUFFS;
+import static game.domain.item.ItemConfig.HAND_SAW;
 import static game.domain.item.ItemConfig.INVERTER;
 import static game.domain.item.ItemConfig.MAGNIFYING_GLASS;
 import static game.util.Randoms.pickItemInList;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 public class DefaultItemGenerator implements ItemGenerator {
     private final static List<Item> ITEMS = Arrays.asList(BEAR, CIGARETTE_PACK,
-            EXPIRED_MEDICINE, HAND_CUFFS, MAGNIFYING_GLASS, INVERTER);
+            EXPIRED_MEDICINE, HAND_CUFFS, HAND_SAW, MAGNIFYING_GLASS, INVERTER);
 
     @Override
     public List<Item> generateItems(int size) {

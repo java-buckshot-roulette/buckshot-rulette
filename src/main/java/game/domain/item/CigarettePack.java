@@ -18,6 +18,11 @@ public class CigarettePack implements Item {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return o != null && getClass() == o.getClass();
+    }
+
+    @Override
     public String toString() {
         return CIGARETTE_PACK.getName();
     }
