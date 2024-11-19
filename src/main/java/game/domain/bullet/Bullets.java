@@ -13,11 +13,14 @@ public class Bullets {
         this.values = values;
     }
 
-    public Bullets StrengthenFirstBullet() {
+    public Bullets strengthenFirstBullet() {
         List<Bullet> newBullets = getBullets();
-        Bullet newBullet = newBullets.getFirst().doubleUpDamage();
-        newBullets.addFirst(newBullet);
-
+        
+        Bullet newBullet = newBullets.getFirst().copy();
+        newBullets.removeFirst();
+        
+        newBullets.addFirst(newBullet.doubleUpDamage());
+        
         return new Bullets(newBullets);
     }
 
