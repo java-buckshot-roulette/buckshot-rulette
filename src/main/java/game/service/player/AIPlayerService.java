@@ -87,7 +87,6 @@ public class AIPlayerService implements PlayerService {
         Item item = SHOT_GUN.getInstance(); // 테스트용 코드 (항상 샷건 사용)
         
         // A.I. 작동 로직
-        // TODO: gameStateDto.bullets()를 통해 가져온 (실탄 / 공포탄) 수를 통해 행동 방식 결정
         /*
          * 1. 맥주
          * 2. 담배: 체력이 감소된 상태라면, 무조건 사용
