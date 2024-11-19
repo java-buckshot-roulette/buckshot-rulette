@@ -30,7 +30,7 @@ public class Application {
         inputView = new InputView(outputView);
     }
 
-    public void run() throws IOException {
+    public void run() {
         outputView.printMenu();
         
         GameResult result = null;
@@ -63,7 +63,7 @@ public class Application {
         return gameController.run();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Application app = new Application();
         app.run();
     }
