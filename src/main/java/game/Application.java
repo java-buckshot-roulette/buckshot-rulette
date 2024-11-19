@@ -9,18 +9,34 @@ import game.config.StageDependency;
 import game.controller.GameController;
 import game.service.Stage.GameResult;
 import game.view.output.OutputView;
+import game.view.input.InputView;
+
+/*
+ * [발견된 버그] 
+ * 1. 아이템 사용 시, 자신의 턴이 유지되지 않고 상대방의 턴으로 넘어가는 버그
+ * 2. 잘못된 아이템 입력에 대한 예외 처리를 구현하지 않음
+ * 
+ * [기능 추가]
+ * 1. 딜러 용 AI 추가
+ */
 
 public class Application {
-    private OutputView outputView = new OutputView();
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private InputView inputView;
+    private OutputView outputView;
+
+    public Application() {
+        outputView = new OutputView();
+        inputView = new InputView(outputView);
+    }
 
     public void run() throws IOException {
         outputView.printMenu();
-        while(true) {
-            outputView.print("선택 : ");
-            int state = Integer.parseInt(this.reader.readLine());
+        
+        GameResult result = null;
 
-            GameResult result = null;
+        while(true) {
+            int state = Integer.parseInt(inputView.askPersonToSelect());
+            
             switch (state) {
                 case 1:
                     result = gameStart();

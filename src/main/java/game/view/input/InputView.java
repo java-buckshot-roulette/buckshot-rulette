@@ -33,4 +33,9 @@ public class InputView {
         outputView.printItemReadMessage();
         return readLine();
     }
+
+    public String askPersonToSelect() {
+        outputView.print("선택 : ");
+        return readLine();
+    }
 }
