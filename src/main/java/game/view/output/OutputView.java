@@ -9,8 +9,24 @@ public class OutputView {
         println("\n누구를 겨냥 할지 입력해 주세요. (예: 나/상대)");
     }
 
+    public void print(String message) {
+        System.out.print(message);
+    }
+
     public void println(String message) {
         System.out.println(message);
+    }
+
+    public void printMenu() {
+        println("\n" +
+                "   ___  __  _________ ________ ______  ______  ___  ____  __  ____   ____________________\n" +
+                "  / _ )/ / / / ___/ //_/ __/ // / __ \\/_  __/ / _ \\/ __ \\/ / / / /  / __/_  __/_  __/ __/\n" + 
+                " / _  / /_/ / /__/ ,< _\\ \\/ _  / /_/ / / /   / , _/ /_/ / /_/ / /__/ _/  / /   / / / _/  \n" +
+                "/____/\\____/\\___/_/|_/___/_//_/\\____/ /_/   /_/|_|\\____/\\____/____/___/ /_/   /_/ /___/  \n" +
+                "                                                                                         \n" +
+                "\n");
+        println("1. 게임 시작\n");
+        println("2. 게임 종료\n");
     }
 
     public void printItemReadMessage() {
@@ -18,9 +34,10 @@ public class OutputView {
     }
 
     public void printStage(int stageNumber) {
-        println("#########################");
+        println("\n#########################");
         println("##      " + stageNumber + "스테이지" + "      ##");
-        println("#########################");
+        println("#########################\n");
+        Timer.delay(1000);
     }
 
     public void printPlayerState(PlayerDataDto dealer, PlayerDataDto challenger) {
@@ -41,12 +58,12 @@ public class OutputView {
     }
 
     public void printPlayersItems(String dealerItems, String challengerItems) {
-        println("----  아이템 목록  ----\n");
+        println("------  아이템 목록  ------\n");
         println("딜러");
         println(dealerItems + "\n");
         println("플레이어");
         println(challengerItems + "\n");
-        println("-----------------------\n");
+        println("---------------------------\n");
     }
 
     public void printBullet(String bullets) {
@@ -54,6 +71,6 @@ public class OutputView {
         println("무작위로 섞는 중...\n");
         Timer.delay(1000);
         println("장전완료!\n");
-        Timer.delay(1000);
+        Timer.delay(2000);
     }
 }

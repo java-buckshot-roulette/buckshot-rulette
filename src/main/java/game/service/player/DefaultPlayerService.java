@@ -92,16 +92,13 @@ public class DefaultPlayerService implements PlayerService {
 
     private void printResultOfShot(int damage) {
         outputView.println("\n철컥...\n");
-
         Timer.delay(1000);
-        
         if (damage == 0) {
             outputView.println("...틱 공포탄 입니다.\n");
-            return;
+        } else {
+            outputView.println("...빵! 실탄 입니다.\n");
         }
-        outputView.println("...빵! 실탄 입니다.\n");
-
-        Timer.delay(1000);
+        Timer.delay(2000);
     }
 
     /**

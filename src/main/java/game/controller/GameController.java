@@ -63,7 +63,7 @@ public class GameController {
         defibrillator = new Defibrillator(true, true);
     }
 
-    public void run() {
+    public GameResult run() {
         GameResult gameState = ONGOING;
         initializeStage();
 
@@ -86,6 +86,8 @@ public class GameController {
                     dealerService.requestPlayerDataDto(), stageDependency);
 
         } while (gameState.equals(ONGOING) || gameState.equals(GO_NEXT_STAGE));
+        
+        return gameState;
     }
 
     private void printStage() {
@@ -145,7 +147,7 @@ public class GameController {
     }
 
     private void proceedPlayerTurn() {
-        outputView.println("######  플레이어 턴  ######\n");
+        outputView.println("\n########  플레이어 턴  ########\n");
         ItemUsageResponseDto itemUsageResponseDto = challengerService.useItem(dealerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(dealerService, itemUsageResponseDto.target());
@@ -153,12 +155,11 @@ public class GameController {
     }
 
     private void proceedDealerTurn() {
-        outputView.println("######    딜러 턴   ######\n");
+        outputView.println("\n#######    딜러 턴   ########\n");
         ItemUsageResponseDto itemUsageResponseDto = dealerService.useItem(challengerService.requestPlayerDataDto(),
                 makeGameStateDto());
         applyPlayerDataDto(challengerService, itemUsageResponseDto.target());
         applyGameStateDataDto(itemUsageResponseDto.gameStateDto().passTurn());
-
     }
 
     private void applyPlayerDataDto(PlayerService target, PlayerDataDto targetData) {
@@ -176,26 +177,5 @@ public class GameController {
 
     private void printBullets() {
         outputView.printBullet(bullets.toString());
-    }
-
-    public static void main(String[] args) {
-        OutputView outputView = new OutputView();
-        InputView inputView = new InputView(outputView);
-        PlayerService playerService = new DefaultPlayerService(
-                new Player(Role.CHALLENGER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView, outputView);
-        PlayerService dealerService = new DefaultPlayerService(
-                new Player(Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
-                        LifeAndDeath.LIFE), inputView, outputView);
-        BulletGenerator bulletGenerator = new DefaultBulletGenerator();
-        ItemGenerator itemGenerator = new DefaultItemGenerator();
-        StageReferee stageReferee = new DefaultStageReferee();
-        TurnService turnService = new DefaultTurnService(new ArrayList<>());
-        Bullets bullets = new Bullets(new ArrayList<>());
-        StageDependency stageDependency = StageDependency.FIRST;
-        GameController gameController = new GameController(playerService, dealerService, bulletGenerator, itemGenerator,
-                stageReferee, turnService, bullets, stageDependency, inputView, outputView);
-        
-        gameController.run();
     }
 }

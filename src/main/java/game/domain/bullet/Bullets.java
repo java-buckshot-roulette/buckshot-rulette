@@ -68,7 +68,7 @@ public class Bullets {
 
     @Override
     public String toString() {
-        return "\n생성된 탄알: [" + Randoms.shuffle(values)
+        return "생성된 탄알: [" + Randoms.shuffle(values)
                 .stream()
                 .map(Bullet::toString)
                 .collect(Collectors.joining(", ")) + "]";
