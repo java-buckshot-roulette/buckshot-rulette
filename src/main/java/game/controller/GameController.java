@@ -64,6 +64,8 @@ public class GameController {
 
     public void run() {
         GameResult gameState = ONGOING;
+        dealerService.setPlayerName("dealer");
+        inputChallengerName();
         initializeStage();
 
         do {

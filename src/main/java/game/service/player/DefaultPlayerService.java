@@ -56,6 +56,16 @@ public class DefaultPlayerService implements PlayerService {
                 .initializeItems();
     }
 
+    @Override
+    public String getName() {
+        return player.getName();
+    }
+
+    @Override
+    public void setPlayerName(String s) {
+        player = player.name(s);
+    }
+
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
         ItemUsageRequestDto itemUsageRequestDto = makeTargetingRival(rival, gameStateDto);
 

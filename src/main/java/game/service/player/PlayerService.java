@@ -18,4 +18,8 @@ public interface PlayerService {
     void addItem(List<Item> items);
 
     void initializePlayer(StageDependency stageDependency);
+
+    String getName();
+
+    void setPlayerName(String s);
 }

@@ -33,4 +33,9 @@ public class InputView {
         outputView.printItemReadMessage();
         return readLine();
     }
+
+    public String readName() {
+        outputView.println("이름을 입력해 주세요.");
+        return readLine();
+    }
 }

@@ -8,16 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+    private String name;
     private final Role role;
     private final Items items;
     private final HealthPoint healthPoint;
     private final LifeAndDeath lifeAndDeath;
 
-    public Player(Role role, Items items, HealthPoint healthPoint, LifeAndDeath lifeAndDeath) {
+
+    public Player(String name, Role role, Items items, HealthPoint healthPoint, LifeAndDeath lifeAndDeath) {
+        this.name = name;
         this.role = role;
         this.items = items;
         this.healthPoint = healthPoint;
         this.lifeAndDeath = lifeAndDeath;
+    }
+
+    public Player name(String name) {
+        return new Player(name, role, items, healthPoint, lifeAndDeath);
     }
 
     public PlayerDataDto makePlayerDataDto() {
@@ -33,20 +40,24 @@ public class Player {
     }
 
     public Player applyEffect(PlayerDataDto newPlayerData) {
-        return new Player(role, newPlayerData.items(), newPlayerData.healthPoint(), newPlayerData.lifeAndDeath());
+        return new Player(name, role, newPlayerData.items(), newPlayerData.healthPoint(), newPlayerData.lifeAndDeath());
     }
 
     public Player addItem(List<Item> items) {
         Items addingItems = new Items(items);
-        return new Player(role, this.items.add(addingItems), healthPoint, lifeAndDeath);
+        return new Player(name, role, this.items.add(addingItems), healthPoint, lifeAndDeath);
     }
 
     public Player initializeHealthPoint(HealthPoint initialValue) {
-        return new Player(role, items, initialValue, lifeAndDeath);
+        return new Player(name, role, items, initialValue, lifeAndDeath);
     }
 
     public Player initializeItems() {
-        return new Player(role, new Items(new ArrayList<>()), healthPoint, lifeAndDeath);
+        return new Player(name, role, new Items(new ArrayList<>()), healthPoint, lifeAndDeath);
+    }
+
+    public String getName() {
+        return name;
     }
 
 
