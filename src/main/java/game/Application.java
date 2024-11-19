@@ -13,7 +13,6 @@ import game.view.input.InputView;
  * 수정해야 할 사항
  * 1. 미보유 아이템 사용 예외 처리
  * 2. 잘못된 아이템 입력 예외 처리
- * 3. "쇠톱" 아이템 사용 구현
  */
 
 public class Application {
