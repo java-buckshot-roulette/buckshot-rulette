@@ -35,4 +35,15 @@ public class DefaultTurnService implements TurnService {
     public void applyTurns(List<Role> turns) {
         this.turns = turns;
     }
+
+    @Override
+    public void proceedTurn(TurnAction turnAction) {
+        Role currentTurn = turns.getFirst(); // 현재 턴 가져오기
+        turnAction.execute(currentTurn); // 현재 턴의 동작 실행
+        passTurn(); // 턴 전환
+    }
+
+    private void passTurn() {
+        turns.removeFirst();
+    }
 }
