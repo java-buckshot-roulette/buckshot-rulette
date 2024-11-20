@@ -57,6 +57,16 @@ public class AIPlayerService implements PlayerService {
                 .initializeItems();
     }
 
+    @Override
+    public String getName() {
+        return player.getName();
+    }
+
+    @Override
+    public void setPlayerName(String s) {
+        player = player.name(s);
+    }
+
     private ItemUsageResponseDto processItemsUntilShotgun(PlayerDataDto rival, GameStateDto gameStateDto) {
         ItemUsageRequestDto newitemUsageRequestDto = new ItemUsageRequestDto(
                                                     player.makePlayerDataDto(), // 1. caster 

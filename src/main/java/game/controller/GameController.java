@@ -14,8 +14,6 @@ import game.service.Stage.GameResult;
 import game.service.Stage.StageReferee;
 import game.service.bullet.BulletGenerator;
 import game.service.item.ItemGenerator;
-import game.service.player.AIPlayerService;
-import game.service.player.DefaultPlayerService;
 import game.service.player.PlayerService;
 import game.service.turn.TurnService;
 import game.util.Randoms;
@@ -78,13 +76,8 @@ public class GameController {
                     stageDependency
             );
         }
-        } while (gameState.equals(ONGOING) || gameState.equals(GO_NEXT_STAGE));
 
         return gameState;
-    }
-
-    private void printStage() {
-        outputView.printStage(stageDependency.getStageNumber());
     }
 
     private void inputChallengerName() {
@@ -92,7 +85,6 @@ public class GameController {
     }
 
     private void initializeStage() {
-        outputView.printStage(stageDependency.getStageNumber());
         printStage();
         defibrillator.initializeDefibrillator();
         challengerService.initializePlayer(stageDependency);
@@ -116,13 +108,6 @@ public class GameController {
     private void processTurn(Role currentTurn) {
         PlayerService currentPlayer = (currentTurn == Role.CHALLENGER) ? challengerService : dealerService;
         PlayerService opponent = (currentTurn == Role.CHALLENGER) ? dealerService : challengerService;
-    private void proceedPlayerTurn() {
-        outputView.println("\n#######   플레이어 턴   #######\n");
-        ItemUsageResponseDto itemUsageResponseDto = challengerService.useItem(dealerService.requestPlayerDataDto(),
-                makeGameStateDto());
-        applyPlayerDataDto(dealerService, itemUsageResponseDto.target());
-        applyGameStateDataDto(itemUsageResponseDto.gameStateDto().passTurn());
-    }
 
         outputView.println("*** " + currentPlayer.getName() + " 턴 ***");
         ItemUsageResponseDto response = currentPlayer.useItem(opponent.requestPlayerDataDto(), makeGameStateDto());
@@ -140,12 +125,10 @@ public class GameController {
                 dealerService.requestPlayerDataDto(),
                 stageDependency
         );
-    private void proceedDealerTurn() {
-        outputView.println("\n#######    딜러 턴   ########\n");
-        ItemUsageResponseDto itemUsageResponseDto = dealerService.useItem(challengerService.requestPlayerDataDto(),
-                makeGameStateDto());
-        applyPlayerDataDto(challengerService, itemUsageResponseDto.target());
-        applyGameStateDataDto(itemUsageResponseDto.gameStateDto().passTurn());
+    }
+
+    private void printStage() {
+        outputView.printStage(stageDependency.getStageNumber());
     }
 
     private void applyPlayerDataDto(PlayerService target, PlayerDataDto targetData) {
