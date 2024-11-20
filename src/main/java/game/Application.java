@@ -36,13 +36,13 @@ public class Application {
         GameResult result = null;
 
         while(true) {
-            int state = Integer.parseInt(inputView.askPersonToSelect());
+            String state = inputView.askPersonToSelect();
 
-            switch (state) {
-                case 1:
+            switch (state.trim()) {
+                case "1":
                     result = gameStart();
                     break;
-                case 2:
+                case "2":
                     System.exit(0);
                     break;
                 default:
