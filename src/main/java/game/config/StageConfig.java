@@ -7,6 +7,7 @@ import game.domain.Role;
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Items;
+import game.domain.turn.Turns;
 import game.service.Stage.DefaultStageReferee;
 import game.service.Stage.StageReferee;
 import game.service.bullet.BulletGenerator;
@@ -42,7 +43,7 @@ public class StageConfig {
 
         StageReferee stageReferee = new DefaultStageReferee();
 
-        TurnService turnService = new DefaultTurnService(new ArrayList<>());
+        TurnService turnService = new DefaultTurnService(Turns.initialLialTurns());
 
         Bullets bullets = new Bullets(new ArrayList<>());
 

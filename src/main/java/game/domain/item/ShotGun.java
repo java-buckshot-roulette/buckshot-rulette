@@ -22,10 +22,8 @@ public class ShotGun implements Item {
         GameStateDto newGameStateData = removeFirstBullet(itemUsageRequestDto);
 
         // 시전자와 타겟이 같을 경우 공포탄이면 턴을 지속한다.
-        // TODO: 리펙터링 필요함 수갑이랑 역할이 곂침, turnService 의 역할이 너무 없음 -> 차라리 일급 컬렉션?
         if (itemUsageRequestDto.caster().equals(itemUsageRequestDto.target()) && discountPoint.equals(ZERO_DAMAGE)) {
-            Role first = newGameStateData.turns().getFirst();
-            newGameStateData.turns().addFirst(first);
+            newGameStateData = newGameStateData.keepTurn();
         }
 
         return itemUsageRequestDto.changeTargetData(getShotTarget(itemUsageRequestDto, discountPoint))
