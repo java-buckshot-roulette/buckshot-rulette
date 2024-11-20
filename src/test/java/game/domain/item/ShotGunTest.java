@@ -8,6 +8,7 @@ import static game.domain.bullet.BulletConfig.RED;
 
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
+import game.domain.turn.Turns;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.PlayerDataDto;
@@ -26,7 +27,7 @@ class ShotGunTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
                 LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -50,7 +51,7 @@ class ShotGunTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
                 LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -73,7 +74,7 @@ class ShotGunTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
                 LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -96,7 +97,7 @@ class ShotGunTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
                 LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(BLUE, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(BLUE, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 

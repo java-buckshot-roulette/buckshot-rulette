@@ -7,6 +7,7 @@ import static game.domain.bullet.BulletConfig.BLUE;
 import game.domain.LifeAndDeath;
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
+import game.domain.turn.Turns;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.PlayerDataDto;
@@ -25,7 +26,7 @@ class HandcuffsTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(BLUE)), new Turns(List.of(CHALLENGER, DEALER)));
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -37,7 +38,7 @@ class HandcuffsTest {
         Assertions.assertThat(newItemRequest
                         .gameDataDto()
                         .turns())
-                .isEqualTo(List.of(CHALLENGER, CHALLENGER, DEALER));
+                .isEqualTo(new Turns(List.of(CHALLENGER, DEALER)));
     }
 
 }

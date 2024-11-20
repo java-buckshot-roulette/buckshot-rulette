@@ -1,6 +1,7 @@
 package game.service.turn;
 
 import game.domain.Role;
+import game.domain.turn.Turns;
 import java.util.List;
 
 public interface TurnService {
@@ -8,9 +9,9 @@ public interface TurnService {
 
     void initializeTurn();
 
-    List<Role> requestTurns();
+    Turns requestTurns();
 
-    void applyTurns(List<Role> turns);
+    void applyTurns(Turns turns);
 
     void proceedTurn(TurnAction turnAction);
 
