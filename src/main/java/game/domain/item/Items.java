@@ -2,6 +2,7 @@ package game.domain.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Items {
@@ -31,6 +32,20 @@ public class Items {
         List<Item> newValues = new ArrayList<>(values);
         newValues.remove(item);
         return new Items(newValues);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Items items = (Items) o;
+        return Objects.equals(values, items.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(values);
     }
 
     @Override

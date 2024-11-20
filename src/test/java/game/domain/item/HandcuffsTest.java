@@ -38,7 +38,7 @@ class HandcuffsTest {
         Assertions.assertThat(newItemRequest
                         .gameDataDto()
                         .turns())
-                .isEqualTo(new Turns(List.of(CHALLENGER, DEALER)));
+                .isEqualTo(new Turns(List.of(CHALLENGER, CHALLENGER, DEALER)));
     }
 
 }

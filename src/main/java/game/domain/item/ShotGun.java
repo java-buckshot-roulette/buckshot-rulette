@@ -23,7 +23,7 @@ public class ShotGun implements Item {
 
         // 시전자와 타겟이 같을 경우 공포탄이면 턴을 지속한다.
         if (itemUsageRequestDto.caster().equals(itemUsageRequestDto.target()) && discountPoint.equals(ZERO_DAMAGE)) {
-            newGameStateData.changeTurns(newGameStateData.turns().KeepTurn());
+            newGameStateData = newGameStateData.keepTurn();
         }
 
         return itemUsageRequestDto.changeTargetData(getShotTarget(itemUsageRequestDto, discountPoint))

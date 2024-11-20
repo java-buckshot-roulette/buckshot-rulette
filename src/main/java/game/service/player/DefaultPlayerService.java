@@ -92,14 +92,12 @@ public class DefaultPlayerService implements PlayerService {
         outputView.printResultOfShot(damage); // 샷건 피해 결과 출력
 
         boolean selfShot = "나".equals(shotTarget);
-        PlayerDataDto target = selfShot ? request.caster() : request.target();
-        ItemUsageRequestDto result = shotgun.useItem(new ItemUsageRequestDto(
-                request.caster(),
-                target,
-                request.gameDataDto()
-        ));
+        if(selfShot) {
+            ItemUsageRequestDto shotResult = shotgun.useItem(new ItemUsageRequestDto(request.caster(), request.caster(), request.gameDataDto()));
+            return createResponse(new ItemUsageRequestDto(shotResult.target(), request.target(), shotResult.gameDataDto()));
+        }
 
-        return createResponse(result);
+        return createResponse(shotgun.useItem(request));
     }
 
     private ItemUsageResponseDto handleEmptyBullets(ItemUsageRequestDto request) {

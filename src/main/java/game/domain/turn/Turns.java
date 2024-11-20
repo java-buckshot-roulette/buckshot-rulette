@@ -32,7 +32,7 @@ public class Turns {
         ArrayList<Role> newTurns = new ArrayList<>(turns);
         Role first = newTurns.getFirst();
         newTurns.addFirst(first);
-        return new Turns(turns);
+        return new Turns(newTurns);
     }
 
 
