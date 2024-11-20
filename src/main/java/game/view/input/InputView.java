@@ -34,6 +34,11 @@ public class InputView {
         return readLine();
     }
 
+    public String askPersonToSelect() {
+        outputView.print("선택 : ");
+        return readLine();
+    }
+
     public String readName() {
         outputView.println("이름을 입력해 주세요.");
         return readLine();

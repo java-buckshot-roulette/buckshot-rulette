@@ -1,6 +1,7 @@
 package game.domain.item;
 
 import static game.domain.LifeAndDeath.DEATH;
+import static game.domain.item.ItemType.SHOT_GUN;
 
 import game.domain.Role;
 import game.domain.healthpoint.HealthPoint;
@@ -58,5 +59,8 @@ public class ShotGun implements Item {
                         .removeFirst());
     }
 
-
+    @Override
+    public String toString() {
+        return SHOT_GUN.getName();
+    }
 }

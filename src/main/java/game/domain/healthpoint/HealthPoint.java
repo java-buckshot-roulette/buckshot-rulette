@@ -6,7 +6,7 @@ public class HealthPoint {
     private final int value;
 
     public HealthPoint(int value) {
-        this.value = value;
+        this.value = value < 0 ? 0 : value;
     }
 
     public HealthPoint heal(HealthPoint healingPoint) {

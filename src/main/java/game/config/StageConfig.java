@@ -34,6 +34,9 @@ public class StageConfig {
         PlayerService dealerService = new DefaultPlayerService(
                 new Player("dealer", Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
                         LifeAndDeath.LIFE), inputView, outputView);
+        PlayerService dealerService = new AIPlayerService(
+                new Player(Role.DEALER, new Items(new ArrayList<>()), new HealthPoint(0),
+                        LifeAndDeath.LIFE), outputView);
 
         BulletGenerator bulletGenerator = new DefaultBulletGenerator();
 
