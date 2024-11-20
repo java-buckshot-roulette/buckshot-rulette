@@ -53,6 +53,7 @@ public class Application {
             if(result != null) {
                 outputView.printResult(result);
                 outputView.printMenu();
+                result = null;
             }
         }
     }
