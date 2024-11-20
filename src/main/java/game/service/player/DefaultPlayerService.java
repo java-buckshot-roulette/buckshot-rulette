@@ -73,12 +73,9 @@ public class DefaultPlayerService implements PlayerService {
             }
             // 아이템 사용
             itemUsageRequestDto = item.useItem(itemUsageRequestDto);
-            if (item.equals(MAGNIFYING_GLASS.getInstance())) {
-                printFirstBullet(gameState.bullets().CheckFirstBullet());
-            }
+            printUsingItem(item, itemUsageRequestDto);
         }
     }
-
 
     private ItemUsageResponseDto useShotGun(Item shotGun, PlayerDataDto rival, GameStateDto gameStateDto) {
         String shotPerson = inputView.askPersonToBeShot();
@@ -86,28 +83,17 @@ public class DefaultPlayerService implements PlayerService {
 
         // 나에게 쐇을 때
         if (shotPerson.equals("나")) {
-            printResultOfShot(firstBulletDamage);
+            outputView.printResultOfShot(firstBulletDamage);
             ItemUsageRequestDto targetingMe = shotGun.useItem(
                     new ItemUsageRequestDto(player.makePlayerDataDto(), player.makePlayerDataDto(), gameStateDto));
             return makeTargetingMe(rival, targetingMe.target(), targetingMe.gameDataDto());
         }
 
         // 상대에게 쐇을 때
-        printResultOfShot(firstBulletDamage);
+        outputView.printResultOfShot(firstBulletDamage);
         ItemUsageRequestDto targetingRival = shotGun.useItem(
                 new ItemUsageRequestDto(player.makePlayerDataDto(), rival, gameStateDto));
         return makeTargetingRival(targetingRival);
-    }
-
-    private void printResultOfShot(int damage) {
-        outputView.println("\n철컥...\n");
-        Timer.delay(1000);
-        if (damage == 0) {
-            outputView.println("...틱 공포탄 입니다.\n");
-        } else {
-            outputView.println("...빵! 실탄 입니다.\n");
-        }
-        Timer.delay(2000);
     }
 
     /**
@@ -160,8 +146,14 @@ public class DefaultPlayerService implements PlayerService {
         return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
     }
 
-    private void printFirstBullet(Bullet bullet) {
-        outputView.println("\n첫번째 탄환은..." + bullet.toString() + "\n");
+    private void printUsingItem(Item item, ItemUsageRequestDto request) {
+        outputView.println("\n" + item.toString() + "을(를) 사용합니다.\n");   
         Timer.delay(1000);
+
+        if (item.equals(MAGNIFYING_GLASS.getInstance())) {
+            Bullet bullet = request.gameDataDto().bullets().CheckFirstBullet();
+            outputView.println("첫번째 탄환은..." + bullet.toString() + "\n");
+            Timer.delay(1000);
+        }
     }
 }

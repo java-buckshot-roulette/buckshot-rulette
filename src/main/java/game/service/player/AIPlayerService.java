@@ -127,14 +127,16 @@ public class AIPlayerService implements PlayerService {
     private ItemUsageResponseDto shootAtRival(Item shotGun, int firstBulletDamage,
                                                 ItemUsageRequestDto itemUsageRequestDto) {
         outputView.println("딜러가 당신을 향해 총을 겨눕니다!");
+        Timer.delay(1000);
         ItemUsageRequestDto shootRival = shotGun.useItem(itemUsageRequestDto);
-        printResultOfShot(firstBulletDamage);
+        outputView.printResultOfShot(firstBulletDamage);
         return updatedData(shootRival);
     }
 
     private ItemUsageResponseDto shootAtMe(Item shotGun, int firstBulletDamage, 
                                             ItemUsageRequestDto itemUsageRequestDto) {
-        outputView.println("딜러가 자신을 향해 총을 겨눕니다!");              
+        outputView.println("딜러가 자신을 향해 총을 겨눕니다!");
+        Timer.delay(1000);          
         // 1. 타겟을 자신으로 변경
         ItemUsageRequestDto targetMe = itemUsageRequestDto.changeTargetData(itemUsageRequestDto.caster());
         // 2. 격발
@@ -143,7 +145,7 @@ public class AIPlayerService implements PlayerService {
         shootMe = shootMe.changeCasterData(shootMe.target())
                          .changeTargetData(itemUsageRequestDto.target());
 
-        printResultOfShot(firstBulletDamage);
+        outputView.printResultOfShot(firstBulletDamage);
         return updatedData(shootMe);
     }
 
@@ -160,21 +162,5 @@ public class AIPlayerService implements PlayerService {
         Timer.delay(1000);
         outputView.println("딜러가 " + item.toString() + "을(를) 사용합니다.\n");
         Timer.delay(1000);
-    }
-
-    /**
-     * 딜러의 총 발사 결과를 출력합니다.
-     * @param damage 탄환 데미지
-     */
-    private void printResultOfShot(int damage) {
-        Timer.delay(1000);
-        outputView.println("\n철컥...\n");
-        Timer.delay(1000);
-        if (damage == 0) {
-            outputView.println("...틱 공포탄 입니다.\n");
-        } else {
-            outputView.println("...빵! 실탄 입니다.\n");
-        }
-        Timer.delay(2000);
     }
 }

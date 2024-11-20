@@ -34,6 +34,17 @@ public class OutputView {
         println("사용할 아이템을 입력해 주세요. (ex1: 돋보기 / ex2: 총)");
     }
 
+    public void printResultOfShot(int damage) {
+        println("\n철컥...\n");
+        Timer.delay(1000);
+        if (damage == 0) {
+            println("...틱 공포탄 입니다.\n");
+        } else {
+            println("...빵! 실탄 입니다.\n");
+        }
+        Timer.delay(2000);
+    }
+
     public void printStage(int stageNumber) {
         println("\n################################");
         println("###        " + stageNumber + " 스테이지" + "        ###");
