@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class DefaultBulletGenerator implements BulletGenerator{
-    private static final List<Bullet> BULLETS_SET = List.of(BLUE);    //뽑을 탄환의 꾸러미 Todo: dependency 에서 관리할지 고민
+    private static final List<Bullet> BULLETS_SET = List.of(RED, RED, RED, BLUE);    //뽑을 탄환의 꾸러미 Todo: dependency 에서 관리할지 고민
     @Override
     public List<Bullet> generateBullet(int size) {
         List<Bullet> bullets = new ArrayList<>();
