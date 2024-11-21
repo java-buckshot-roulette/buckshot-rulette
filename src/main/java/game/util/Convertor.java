@@ -12,4 +12,7 @@ public class Convertor {
         //todo: 예외 처리 클래스 따로 빼기
     }
 
+    public static Integer parseInt(String number) {
+        return Integer.parseInt(number);
+    }
 }
