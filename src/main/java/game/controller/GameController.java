@@ -93,7 +93,7 @@ public class GameController {
 
     // ======= Game Rounds =======
     private void prepareForRound() {
-        bullets.reload(bulletGenerator.generateBullet(Randoms.pickNumberInRange(3, 8)));
+        bullets = bullets.reload(bulletGenerator.generateBullet(Randoms.pickNumberInRange(3, 8)));
         outputView.printBullet(bullets.toString());
         turnService.initializeTurn();
         distributeItems();
