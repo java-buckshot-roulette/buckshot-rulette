@@ -25,8 +25,7 @@ public record PlayerDataDto(HealthPoint healthPoint, Items items, LifeAndDeath l
             return false;
         }
         PlayerDataDto that = (PlayerDataDto) o;
-        return Objects.equals(items, that.items) && Objects.equals(healthPoint, that.healthPoint)
-                && lifeAndDeath == that.lifeAndDeath;
+        return this == that;
     }
 
     @Override

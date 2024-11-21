@@ -29,7 +29,7 @@ public class InputView {
     }
 
 
-    public String readItem(String dealerItems, String challengerItems) {
+    public String readItem() {
         outputView.printItemReadMessage();
         return readLine();
     }
