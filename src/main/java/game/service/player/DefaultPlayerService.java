@@ -1,5 +1,7 @@
 package game.service.player;
 
+import static game.util.Convertor.StringToItem;
+
 import game.config.StageDependency;
 import game.domain.Player;
 import game.domain.bullet.Bullet;
@@ -9,6 +11,7 @@ import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
+import game.exception.OutOfPossessionItemException;
 import game.util.Convertor;
 import game.util.Timer;
 import game.view.input.InputView;
@@ -118,9 +121,25 @@ public class DefaultPlayerService implements PlayerService {
     // ======= 사용자 입력 및 출력 =======
     private Item getItemInput(ItemUsageRequestDto request) {
         outputView.printPlayerState(request.target(), request.caster()); // 현재 상태 출력
-        String dealerItems = request.target().items().toString();
-        String challengerItems = request.caster().items().toString();
-        return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
+        return readITem();
+    }
+
+    private Item readITem() {
+        try {
+        String item = inputView.readItem();
+        validatePossessionItem(item, player);
+        return Convertor.StringToItem(item);
+        } catch (Exception exception) {
+            outputView.println(exception.getMessage());
+            return readITem();
+
+        }
+    }
+
+    private void validatePossessionItem(String item, Player player) {
+        if(!player.hasItem(StringToItem(item))){
+            throw new OutOfPossessionItemException();
+        }
     }
 
     private void printItemUsage(Item item, ItemUsageRequestDto request) {

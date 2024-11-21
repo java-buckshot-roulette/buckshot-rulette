@@ -21,10 +21,10 @@ class ShotGunTest {
     @Test
     void 빨간탄이_상대에게_피해를_준다() {
         //given
-        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LIFE);
 
-        PlayerDataDto target = new PlayerDataDto(new HealthPoint(7), new Items(Collections.emptyList()),
+        PlayerDataDto target = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LIFE);
 
         GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
@@ -39,7 +39,7 @@ class ShotGunTest {
         Assertions.assertThat(newItemRequest
                         .target()
                         .healthPoint())
-                .isEqualTo(new HealthPoint(6));
+                .isEqualTo(new HealthPoint(5));
     }
 
     @Test

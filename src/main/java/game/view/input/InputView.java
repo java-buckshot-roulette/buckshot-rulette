@@ -29,14 +29,16 @@ public class InputView {
     }
 
 
-    public String readItem(String dealerItems, String challengerItems) {
+    public String readItem() {
         outputView.printItemReadMessage();
         return readLine();
     }
 
-    public String askPersonToSelect() {
+    public String askPersonToSelectStartingNumber() {
         outputView.print("선택 : ");
-        return readLine();
+        String number = readLine();
+        InputValidator.validateStartingNumber(number);
+        return number;
     }
 
     public String readName() {

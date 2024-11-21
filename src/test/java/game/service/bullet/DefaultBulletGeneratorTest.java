@@ -13,7 +13,7 @@ class DefaultBulletGeneratorTest {
         Bullets bullets = new Bullets(new ArrayList<>());
 
         //when
-        bullets.reload(defaultBulletGenerator.generateBullet(3));
+        bullets = bullets.reload(defaultBulletGenerator.generateBullet(3));
 
         //then
         Assertions.assertThat(bullets.isEmpty()).isFalse();

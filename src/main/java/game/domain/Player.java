@@ -1,7 +1,10 @@
 package game.domain;
 
+import static game.domain.item.ItemType.SHOT_GUN;
+
 import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
+import game.domain.item.ItemType;
 import game.domain.item.Items;
 import game.dto.PlayerDataDto;
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ public class Player {
     }
 
     public boolean hasItem(Item item) {
+        if(item.equals(SHOT_GUN.getInstance())) {
+            return true;    //샷건은 공용
+        }
         return items.contains(item);
     }
 

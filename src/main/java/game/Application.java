@@ -1,23 +1,24 @@
 package game;
 
-import java.io.IOException;
+import static game.util.Convertor.parseInt;
 
 import game.config.StageConfig;
 import game.config.StageDependency;
 import game.controller.GameController;
+import game.exception.IllegalStartingNumberException;
 import game.service.Stage.GameResult;
 import game.view.output.OutputView;
 import game.view.input.InputView;
 
 /*
  * 수정해야 할 사항
- * 
+ *
  * 1. 미보유 아이템 사용 예외 처리
  * 2. 잘못된 아이템 입력 예외 처리
- * 
+ *
  * 3. 수갑을 한번만 사용할 수 있도록 수정
  * 4. 쇠톱을 한번만 사용할 수 있도록 수정
- * 
+ *
  * 5. 체력 회복 상한선 추가
  */
 
@@ -32,11 +33,11 @@ public class Application {
 
     public void run() {
         outputView.printMenu();
-        
+
         GameResult result = null;
 
-        while(true) {
-            int state = Integer.parseInt(inputView.askPersonToSelect());
+        while (true) {
+            int state = parseInt(pickStartingNumber());
 
             switch (state) {
                 case 1:
@@ -45,15 +46,21 @@ public class Application {
                 case 2:
                     System.exit(0);
                     break;
-                default:
-                    outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
-                    break;
             }
 
-            if(result != null) {
+            if (result != null) {
                 outputView.printResult(result);
                 outputView.printMenu();
             }
+        }
+    }
+
+    private String pickStartingNumber() {
+        try {
+            return inputView.askPersonToSelectStartingNumber();
+        } catch (IllegalStartingNumberException exception) {
+            outputView.println(exception.getMessage());
+            return pickStartingNumber();
         }
     }
 
