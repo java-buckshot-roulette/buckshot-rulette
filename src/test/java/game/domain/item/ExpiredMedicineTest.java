@@ -22,10 +22,10 @@ class ExpiredMedicineTest {
     @Test
     void 상한약을_사용한이후_목숨이_이전과_달라짐() {
         //given
-        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+        PlayerDataDto target = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
         GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
@@ -40,7 +40,7 @@ class ExpiredMedicineTest {
         Assertions.assertThat(newItemRequest
                         .caster()
                         .healthPoint())
-                .isNotEqualTo(new HealthPoint(8));
+                .isNotEqualTo(new HealthPoint(6));
     }
 
 }

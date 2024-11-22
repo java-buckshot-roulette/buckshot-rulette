@@ -4,6 +4,7 @@ import static game.util.Convertor.StringToItem;
 
 import game.config.StageDependency;
 import game.domain.Player;
+import game.domain.Role;
 import game.domain.bullet.Bullet;
 import game.domain.item.Item;
 import game.domain.item.ItemType;
@@ -65,6 +66,11 @@ public class DefaultPlayerService implements PlayerService {
         player = player.name(name);
     }
 
+    @Override
+    public boolean isPlayerRole(Role role) {
+        return player.isPlayerRole(role);
+    }
+
     // ======= 아이템 사용 처리 =======
     private ItemUsageResponseDto processItemUsage(ItemUsageRequestDto request) {
         while (true) {
@@ -95,9 +101,11 @@ public class DefaultPlayerService implements PlayerService {
         outputView.printResultOfShot(damage); // 샷건 피해 결과 출력
 
         boolean selfShot = "나".equals(shotTarget);
-        if(selfShot) {
-            ItemUsageRequestDto shotResult = shotgun.useItem(new ItemUsageRequestDto(request.caster(), request.caster(), request.gameDataDto()));
-            return createResponse(new ItemUsageRequestDto(shotResult.target(), request.target(), shotResult.gameDataDto()));
+        if (selfShot) {
+            ItemUsageRequestDto shotResult = shotgun.useItem(
+                    new ItemUsageRequestDto(request.caster(), request.caster(), request.gameDataDto()));
+            return createResponse(
+                    new ItemUsageRequestDto(shotResult.target(), request.target(), shotResult.gameDataDto()));
         }
 
         return createResponse(shotgun.useItem(request));
@@ -108,7 +116,7 @@ public class DefaultPlayerService implements PlayerService {
         return createResponse(request);
     }
 
-    // ======= DTO 생성 및 상태 갱신 =======
+    // ======= DTO 생성 및 상태 갱신 =======turn
     private ItemUsageRequestDto makeRequestDto(PlayerDataDto rival, GameStateDto gameStateDto) {
         return new ItemUsageRequestDto(player.makePlayerDataDto(), rival, gameStateDto);
     }
@@ -126,9 +134,9 @@ public class DefaultPlayerService implements PlayerService {
 
     private Item readITem() {
         try {
-        String item = inputView.readItem();
-        validatePossessionItem(item, player);
-        return Convertor.StringToItem(item);
+            String item = inputView.readItem();
+            validatePossessionItem(item, player);
+            return Convertor.StringToItem(item);
         } catch (Exception exception) {
             outputView.println(exception.getMessage());
             return readITem();
@@ -137,7 +145,7 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private void validatePossessionItem(String item, Player player) {
-        if(!player.hasItem(StringToItem(item))){
+        if (!player.hasItem(StringToItem(item))) {
             throw new OutOfPossessionItemException();
         }
     }
