@@ -13,13 +13,8 @@ import game.view.input.InputView;
 /*
  * 수정해야 할 사항
  *
- * 1. 미보유 아이템 사용 예외 처리
- * 2. 잘못된 아이템 입력 예외 처리
- *
- * 3. 수갑을 한번만 사용할 수 있도록 수정
- * 4. 쇠톱을 한번만 사용할 수 있도록 수정
- *
- * 5. 체력 회복 상한선 추가
+ * 1. 수갑을 한번만 사용할 수 있도록 수정
+ * 2. 쇠톱을 한번만 사용할 수 있도록 수정
  */
 
 public class Application {
@@ -67,7 +62,7 @@ public class Application {
 
     public GameResult gameStart() {
         StageConfig stageConfig = new StageConfig();
-        GameController gameController = stageConfig.gameController(StageDependency.FIRST);
+        GameController gameController = stageConfig.gameController(StageDependency.THIRD);
         return gameController.run();
     }
 
