@@ -42,7 +42,7 @@ public class InputView {
     }
 
     public String readName() {
-        outputView.println("이름을 입력해 주세요.");
+        outputView.println("\n이름을 입력해 주세요.");
         return readLine();
     }
 }
