@@ -78,6 +78,11 @@ public class AIPlayerService implements PlayerService {
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
                 nextBullet = gameStateDto.bullets().CheckFirstBullet();
             }
+            if(item.equals(ItemType.BEAR.getInstance())) {
+                Bullet firstBullet = state.bullets().CheckFirstBullet();
+                outputView.println("..팅! " + firstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
+                Timer.delay(1000);
+            }
             printUsingItem(item);
         }
     }

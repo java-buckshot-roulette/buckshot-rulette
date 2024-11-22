@@ -1,8 +1,5 @@
 package game.service.player;
 
-
-import static game.domain.item.ItemType.MAGNIFYING_GLASS;
-
 import game.config.StageDependency;
 import game.domain.Player;
 import game.domain.bullet.Bullet;
@@ -72,8 +69,9 @@ public class DefaultPlayerService implements PlayerService {
                 return useShotGun(item, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
             }
             // 아이템 사용
+            Bullet firstBullet = gameState.bullets().CheckFirstBullet();
             itemUsageRequestDto = item.useItem(itemUsageRequestDto);
-            printUsingItem(item, itemUsageRequestDto);
+            printUsingItem(item, firstBullet);
         }
     }
 
@@ -146,13 +144,15 @@ public class DefaultPlayerService implements PlayerService {
         return Convertor.StringToItem(inputView.readItem(dealerItems, challengerItems));
     }
 
-    private void printUsingItem(Item item, ItemUsageRequestDto request) {
+    private void printUsingItem(Item item, Bullet firstBullet) {
         outputView.println("\n" + item.toString() + "을(를) 사용합니다.\n");   
         Timer.delay(1000);
 
-        if (item.equals(MAGNIFYING_GLASS.getInstance())) {
-            Bullet bullet = request.gameDataDto().bullets().CheckFirstBullet();
-            outputView.println("첫번째 탄환은..." + bullet.toString() + "\n");
+        if(item.equals(ItemType.BEAR.getInstance())) {
+            outputView.println("...팅! " + firstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
+            Timer.delay(1000);
+        } else if(item.equals(ItemType.MAGNIFYING_GLASS.getInstance())) {
+            outputView.println("첫번째 탄환은..." + firstBullet.toString() + "\n");
             Timer.delay(1000);
         }
     }
