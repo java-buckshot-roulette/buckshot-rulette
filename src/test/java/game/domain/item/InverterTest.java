@@ -10,6 +10,7 @@ import game.domain.LifeAndDeath;
 import game.domain.bullet.Bullet;
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
+import game.domain.turn.Turns;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.PlayerDataDto;
@@ -28,7 +29,7 @@ class InverterTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -52,7 +53,7 @@ class InverterTest {
         PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
