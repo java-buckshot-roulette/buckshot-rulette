@@ -16,12 +16,4 @@ public record GameStateDto(Bullets bullets, Turns turns) {
     public GameStateDto changeTurns(Turns newTurns) {
         return new GameStateDto(this.bullets, newTurns);
     }
-
-    public GameStateDto passTurn() {
-        return changeTurns(turns.passTurn());
-    }
-
-    public GameStateDto keepTurn() {
-        return changeTurns(turns.KeepTurn());
-    }
 }

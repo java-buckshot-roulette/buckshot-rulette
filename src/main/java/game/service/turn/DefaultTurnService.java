@@ -57,7 +57,8 @@ public class DefaultTurnService implements TurnService {
         GameStateDto gameStateDto = createGameState(bullets);
 
         ItemUsageResponseDto response = currentPlayer.useItem(opponent.requestPlayerDataDto(), gameStateDto);
-        response = ItemUsageResponseDto.of(response.target(), response.gameStateDto().passTurn());
+        response = ItemUsageResponseDto.of(response.target(), response.gameStateDto().changeTurns(response.gameStateDto()
+                .turns().passTurn()));
 
         updatePlayerState(opponent, response.target());
         updateGameTurn(response);
