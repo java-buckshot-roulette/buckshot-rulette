@@ -43,7 +43,7 @@ public class StageConfig {
 
         StageReferee stageReferee = new DefaultStageReferee();
 
-        TurnService turnService = new DefaultTurnService(Turns.initialLialTurns());
+        TurnService turnService = new DefaultTurnService(outputView, Turns.initialLialTurns());
 
         Bullets bullets = new Bullets(new ArrayList<>());
 

@@ -15,7 +15,7 @@ public class Bear implements Item {
 
         return itemUsageRequestDto
                 .changeGameData(gameStateDto.changeBullets(newBullets))
-                .reduceCasterItem(this);
+                .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
     }
 
     @Override

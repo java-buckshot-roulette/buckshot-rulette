@@ -15,7 +15,7 @@ public class ExpiredMedicine implements Item {
         HealOrDiscount randomPick = Randoms.pickHealOrDiscount();
         itemUsageRequestDto = healOrDiscount(itemUsageRequestDto, randomPick);
 
-        return itemUsageRequestDto.reduceCasterItem(this);
+        return itemUsageRequestDto.changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
 
     }
 
