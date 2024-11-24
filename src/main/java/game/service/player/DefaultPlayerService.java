@@ -69,23 +69,22 @@ public class DefaultPlayerService implements PlayerService {
     private ItemUsageResponseDto processItemUsage(ItemUsageRequestDto request) {
         while (true) {
             if (request.gameDataDto().bullets().isEmpty()) {
-                outputView.println("탄환이 모두 소진되었습니다."); // 탄환 부족 메시지 출력
                 return handleEmptyBullets(request);
             }
 
             Item item = getItemInput(request);
             if (item.equals(ItemType.SHOT_GUN.getInstance())) {
-                outputView.println("\n샷건을 사용합니다."); // 샷건 사용 메시지 출력
                 return handleShotgunUsage(request, item);
             }
-
+            
             request = useItemAndUpdateState(item, request);
         }
     }
 
     private ItemUsageRequestDto useItemAndUpdateState(Item item, ItemUsageRequestDto request) {
+        Bullet firstBullet = request.gameDataDto().bullets().CheckFirstBullet();
         ItemUsageRequestDto updatedRequest = item.useItem(request);
-        printItemUsage(item, updatedRequest);
+        printItemUsage(item, updatedRequest, firstBullet);
         return updatedRequest;
     }
 
@@ -104,7 +103,8 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private ItemUsageResponseDto handleEmptyBullets(ItemUsageRequestDto request) {
-        outputView.println("탄환이 모두 소진되었습니다. 아이템 사용 종료."); // 탄환 부족 출력
+        outputView.println("\n탄환이 모두 소진되었습니다.\n"); // 탄환 부족 출력
+        Timer.delay(1000);
         return createResponse(request);
     }
 
@@ -142,17 +142,17 @@ public class DefaultPlayerService implements PlayerService {
         }
     }
 
-    private void printItemUsage(Item item, ItemUsageRequestDto request) {
+    private void printItemUsage(Item item, ItemUsageRequestDto request, Bullet beforeFirstBullet) {
         outputView.println("\n" + item + "을(를) 사용합니다.\n"); // 아이템 사용 메시지 출력
         Timer.delay(1000);
 
-        Bullet firstBullet = request.gameDataDto().bullets().CheckFirstBullet();
         if (item.equals(ItemType.MAGNIFYING_GLASS.getInstance())) {
+            Bullet firstBullet = request.gameDataDto().bullets().CheckFirstBullet();
             outputView.println("첫 번째 탄환은... " + firstBullet + "\n"); // 돋보기 사용 시 출력
             Timer.delay(1000);
         } else if (item.equals(ItemType.BEAR.getInstance())) {
-            outputView.println("..팅! " + firstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
-            Timer.delay(1000);
+            outputView.println("..팅! " + beforeFirstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
+            Timer.delay(2000);
         }
     }
 }

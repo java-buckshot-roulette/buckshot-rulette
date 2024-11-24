@@ -73,27 +73,22 @@ public class AIPlayerService implements PlayerService {
                                                     rival,                      // 2. target
                                                     gameStateDto);              // 3. game data (탄환 & 턴 정보)
         while(true) {
-            // 탄환 소진 여부 확인
             GameStateDto state = newitemUsageRequestDto.gameDataDto();
             if(state.bullets().isEmpty()) {
                 return updatedData(newitemUsageRequestDto);
             }
-            // 샷건 발사 여부 확인
+            
             Item item = decideItem(newitemUsageRequestDto);
             if (item.equals(ItemType.SHOT_GUN.getInstance())) {
+                printUsingItem(item, gameStateDto);
                 return useShotGun(item, newitemUsageRequestDto);
             }
-            // 아이템 사용
+
             newitemUsageRequestDto = item.useItem(newitemUsageRequestDto);
+            printUsingItem(item, gameStateDto);
             if (item.equals(MAGNIFYING_GLASS.getInstance())) {
-                nextBullet = gameStateDto.bullets().CheckFirstBullet();
-            }
-            if(item.equals(ItemType.BEAR.getInstance())) {
-                Bullet firstBullet = state.bullets().CheckFirstBullet();
-                outputView.println("..팅! " + firstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
-                Timer.delay(1000);
-            }
-            printUsingItem(item);
+                nextBullet = newitemUsageRequestDto.gameDataDto().bullets().CheckFirstBullet();
+            }       
         }
     }
 
@@ -107,8 +102,9 @@ public class AIPlayerService implements PlayerService {
          * 2. 담배: 체력이 감소된 상태라면, 무조건 사용
          * 3. 상한약
          * 4. 수갑
-         * 5. 인버터
-         * 6. 돋보기
+         * 5. 쇠톱
+         * 6. 인버터
+         * 7. 돋보기
          * 7. 샷건
          */
 
@@ -122,8 +118,6 @@ public class AIPlayerService implements PlayerService {
 
         int redCount = state.bullets().getRedBulletCount();
         int blueCount = state.bullets().getBlueBulletCount();
-
-        printUsingItem(shotGun);
 
         ItemUsageResponseDto result = null;
         if((nextBullet != null && nextBullet.equals(RED))) {                        
@@ -143,9 +137,8 @@ public class AIPlayerService implements PlayerService {
                                                 ItemUsageRequestDto itemUsageRequestDto) {
         outputView.println("딜러가 당신을 향해 총을 겨눕니다!");
         Timer.delay(1000);
-        ItemUsageRequestDto shootRival = shotGun.useItem(itemUsageRequestDto);
         outputView.printResultOfShot(firstBulletDamage);
-        return updatedData(shootRival);
+        return updatedData(shotGun.useItem(itemUsageRequestDto));
     }
 
     private ItemUsageResponseDto shootAtMe(Item shotGun, int firstBulletDamage, 
@@ -164,18 +157,25 @@ public class AIPlayerService implements PlayerService {
         return updatedData(shootMe);
     }
 
+    /**
+     * 시전자의 상태를 갱신하고, 변경된 타겟 및 게임 상태 정보를 반환합니다.
+     * @param itemUsageRequestDto 시전자, 타겟, 게임 상태 정보
+     * @return 변경된 플레이어 및 게임 상태 정보
+     */
     private ItemUsageResponseDto updatedData(ItemUsageRequestDto itemUsageRequestDto) {
         applyPlayerDataDto(itemUsageRequestDto.caster());
         return new ItemUsageResponseDto(itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto());
     }
 
-    /**
-     * 딜러의 아이템 사용 메시지를 출력합니다.
-     * @param item 사용된 아이템
-     */
-    private void printUsingItem(Item item) {
+    private void printUsingItem(Item item, GameStateDto gameStateDto) {
         Timer.delay(1000);
         outputView.println("딜러가 " + item.toString() + "을(를) 사용합니다.\n");
         Timer.delay(1000);
+
+        if(item.equals(ItemType.BEAR.getInstance())) {
+            Bullet firstBullet = gameStateDto.bullets().CheckFirstBullet();
+            outputView.println("..팅! " + firstBullet.toString() + " 탄환이 빠져나왔습니다.\n");
+            Timer.delay(2000);
+        }
     }
 }
