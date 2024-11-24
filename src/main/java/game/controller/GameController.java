@@ -49,7 +49,7 @@ public class GameController {
         this.defibrillator = new Defibrillator(true, true);
     }
 
-    public GameResult run() {
+    public void run() {
         GameResult gameState = ONGOING;
 
         setupGame();
@@ -67,7 +67,7 @@ public class GameController {
 
             gameState = evaluateGameResult();
         }
-        return gameState;
+        outputView.println(gameState.toMessage());
     }
 
     private void proceedTurn() {
