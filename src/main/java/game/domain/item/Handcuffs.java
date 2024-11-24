@@ -19,7 +19,7 @@ public class Handcuffs implements Item {
         return itemUsageRequestDto.changeGameData(itemUsageRequestDto
                         .gameDataDto()
                         .changeTurns(newTurns))
-                .reduceCasterItem(this);
+                .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
     }
 
     @Override

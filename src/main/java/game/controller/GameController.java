@@ -4,11 +4,9 @@ import static game.service.Stage.GameResult.GO_NEXT_STAGE;
 import static game.service.Stage.GameResult.ONGOING;
 
 import game.config.StageDependency;
-import game.domain.Role;
 import game.domain.bullet.Bullets;
-import game.dto.GameStateDto;
-import game.dto.ItemUsageResponseDto;
-import game.dto.PlayerDataDto;
+import game.dto.TurnRequestDto;
+import game.dto.TurnResponseDto;
 import game.service.Defibrillator;
 import game.service.Stage.GameResult;
 import game.service.Stage.StageReferee;
@@ -19,6 +17,7 @@ import game.service.turn.TurnService;
 import game.util.Randoms;
 import game.view.input.InputView;
 import game.view.output.OutputView;
+import java.util.List;
 
 public class GameController {
     private final PlayerService challengerService;
@@ -63,12 +62,18 @@ public class GameController {
                 prepareForRound();
             }
 
-            turnService.proceedTurn(this::processPlayerTurn);
+            proceedTurn();
             handleDefibrillatorActions();
 
             gameState = evaluateGameResult();
         }
         return gameState;
+    }
+
+    private void proceedTurn() {
+        TurnRequestDto turnRequestDto = TurnRequestDto.of(List.of(challengerService, dealerService), bullets);
+        TurnResponseDto turnResponseDto = turnService.proceedTurn(turnRequestDto);
+        updateGameState(turnResponseDto);
     }
 
     // ======= Initialization and Setup =======
@@ -105,24 +110,6 @@ public class GameController {
         dealerService.addItem(itemGenerator.generateItems(itemQuantity));
     }
 
-    // ======= Player Turn Handling =======
-    private void processPlayerTurn(Role currentTurn) {
-        PlayerService currentPlayer = (currentTurn == Role.CHALLENGER) ? challengerService : dealerService;
-        PlayerService opponent = (currentTurn == Role.CHALLENGER) ? dealerService : challengerService;
-
-        executeTurn(currentPlayer, opponent);
-    }
-
-    private void executeTurn(PlayerService currentPlayer, PlayerService opponent) {
-        outputView.println("*** " + currentPlayer.getName() + " 턴 ***");
-        GameStateDto gameStateDto = createGameState();
-
-        ItemUsageResponseDto response = currentPlayer.useItem(opponent.requestPlayerDataDto(), gameStateDto);
-
-        updatePlayerState(opponent, response.target());
-        updateGameState(response.gameStateDto());
-    }
-
     // ======= Game State Updates =======
     private void handleDefibrillatorActions() {
         challengerService.applyPlayerDataDto(
@@ -144,17 +131,8 @@ public class GameController {
         );
     }
 
-    private void updatePlayerState(PlayerService target, PlayerDataDto newData) {
-        target.applyPlayerDataDto(newData);
-    }
-
-    private void updateGameState(GameStateDto gameStateDto) {
-        bullets = gameStateDto.bullets();
-        turnService.applyTurns(gameStateDto.turns());
-    }
-
-    private GameStateDto createGameState() {
-        return new GameStateDto(bullets, turnService.requestTurns());
+    private void updateGameState(TurnResponseDto turnResponseDto) {
+        bullets = turnResponseDto.bullets();
     }
 }
 

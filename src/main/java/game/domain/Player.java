@@ -35,7 +35,7 @@ public class Player {
     }
 
     public boolean hasItem(Item item) {
-        if(item.equals(SHOT_GUN.getInstance())) {
+        if (item.equals(SHOT_GUN.getInstance())) {
             return true;    //샷건은 공용
         }
         return items.contains(item);
@@ -64,6 +64,10 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isPlayerRole(Role role) {
+        return this.role.equals(role);
     }
 
 

@@ -13,7 +13,7 @@ public class HandSaw implements Item {
         return itemUsageRequestDto.changeGameData(itemUsageRequestDto
                         .gameDataDto()
                         .changeBullets(newBullets))
-                .reduceCasterItem(this);
+                .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
     }
 
     private static Bullets strengthenFirstBullet(ItemUsageRequestDto itemUsageRequestDto) {
