@@ -57,7 +57,7 @@ public class Application {
 
     private String pickStartingNumber() {
         try {
-            return inputView.askPersonToSelectStartingNumber();
+            return inputView.askStartingNumber();
         } catch (IllegalStartingNumberException exception) {
             outputView.println(exception.getMessage());
             return pickStartingNumber();
