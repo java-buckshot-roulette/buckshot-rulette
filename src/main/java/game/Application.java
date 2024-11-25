@@ -15,6 +15,8 @@ import game.view.input.InputView;
  *
  * 1. 수갑을 한번만 사용할 수 있도록 수정
  * 2. 쇠톱을 한번만 사용할 수 있도록 수정
+ * 
+ * 3. 상한 약 사용 후 체력이 0 이하로 떨어졌을 때, 턴이 종료되기 전까지 사망하지 않는 현상
  */
 
 public class Application {
