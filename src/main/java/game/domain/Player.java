@@ -4,7 +4,6 @@ import static game.domain.item.ItemType.SHOT_GUN;
 
 import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
-import game.domain.item.ItemType;
 import game.domain.item.Items;
 import game.dto.PlayerDataDto;
 import java.util.ArrayList;
