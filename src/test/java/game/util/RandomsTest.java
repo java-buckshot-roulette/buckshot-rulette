@@ -1,11 +1,12 @@
 package game.util;
 
-import static game.domain.item.ItemConfig.BEAR;
+import static game.domain.item.ItemType.BEAR;
 
 import game.domain.bullet.Bullet;
 import game.domain.bullet.BulletConfig;
 import game.domain.bullet.Type;
 import game.domain.item.Item;
+import game.domain.item.ItemType;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
@@ -15,7 +16,8 @@ class RandomsTest {
     @Test
     void 아이템_생성() {
         //given
-        List<Item> item = List.of(BEAR);
+        Item bear = BEAR.getInstance();
+        List<Item> item = List.of(bear);
 
         //when
         Optional<Item> generatedItem = Randoms.pickItemInList(item);
@@ -23,7 +25,7 @@ class RandomsTest {
         //then
         Assertions.assertThat(generatedItem)
                 .isPresent()
-                .contains(BEAR);
+                .contains(bear);
     }
 
     @Test

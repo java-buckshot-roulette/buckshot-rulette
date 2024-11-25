@@ -1,8 +1,8 @@
 package game.domain.item;
 
-import static game.domain.item.ItemConfig.BEAR;
-import static game.domain.item.ItemConfig.EXPIRED_MEDICINE;
-import static game.domain.item.ItemConfig.HAND_CUFFS;
+import static game.domain.item.ItemType.BEAR;
+import static game.domain.item.ItemType.EXPIRED_MEDICINE;
+import static game.domain.item.ItemType.HAND_CUFFS;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -12,8 +12,12 @@ class ItemsTest {
     @Test
     void 아이템_추가() {
         //given
-        List<Item> oldItem = List.of(BEAR);
-        List<Item> additionalItemList = List.of(BEAR, BEAR, BEAR, BEAR, BEAR, BEAR, HAND_CUFFS, EXPIRED_MEDICINE);
+        Item bear = BEAR.getInstance();
+        Item handCuffs = HAND_CUFFS.getInstance();
+        Item expiredMedicine = EXPIRED_MEDICINE.getInstance();
+
+        List<Item> oldItem = List.of(bear);
+        List<Item> additionalItemList = List.of(bear, bear, bear, bear, bear, bear, handCuffs, expiredMedicine);
         Items items = new Items(oldItem);
         Items additionalItems = new Items(additionalItemList);
 
@@ -21,8 +25,8 @@ class ItemsTest {
         Items newItems = items.add(additionalItems);
 
         //then
-        assertThat(newItems.contains(HAND_CUFFS)).isTrue();
-        assertThat(newItems.contains(EXPIRED_MEDICINE)).isFalse();
+        assertThat(newItems.contains(handCuffs)).isTrue();
+        assertThat(newItems.contains(expiredMedicine)).isFalse();
     }
 
 }
