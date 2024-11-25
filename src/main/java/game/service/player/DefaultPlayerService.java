@@ -8,6 +8,7 @@ import game.domain.Role;
 import game.domain.bullet.Bullet;
 import game.domain.item.Item;
 import game.domain.item.ItemType;
+import game.domain.item.Items;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
@@ -129,23 +130,25 @@ public class DefaultPlayerService implements PlayerService {
     // ======= 사용자 입력 및 출력 =======
     private Item getItemInput(ItemUsageRequestDto request) {
         outputView.printPlayerState(request.target(), request.caster()); // 현재 상태 출력
-        return readITem();
+        return readItem(request);
     }
 
-    private Item readITem() {
+    private Item readItem(ItemUsageRequestDto request) {
         try {
             String item = inputView.readItem();
-            validatePossessionItem(item, player);
+            validatePossessionItem(item, request);
             return Convertor.StringToItem(item);
         } catch (Exception exception) {
             outputView.println(exception.getMessage());
-            return readITem();
+            return readItem(request);
 
         }
     }
 
-    private void validatePossessionItem(String item, Player player) {
-        if (!player.hasItem(StringToItem(item))) {
+    private void validatePossessionItem(String item, ItemUsageRequestDto request) {
+        Items inventory = request.caster().items();
+        if (!inventory.contains(StringToItem(item)) && 
+            !item.equals(ItemType.SHOT_GUN.getName())) {
             throw new OutOfPossessionItemException();
         }
     }
