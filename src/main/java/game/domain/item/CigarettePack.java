@@ -17,6 +17,10 @@ public class CigarettePack implements Item {
                 .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
     }
 
+    public HealthPoint getHealingPoint() {
+        return HEALING_POINT;
+    }
+
     @Override
     public boolean equals(Object o) {
         return o != null && getClass() == o.getClass();
