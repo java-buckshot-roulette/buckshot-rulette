@@ -62,7 +62,7 @@ public class Application {
 
     public GameResult gameStart() {
         StageConfig stageConfig = new StageConfig();
-        GameController gameController = stageConfig.gameController(StageDependency.THIRD);
+        GameController gameController = stageConfig.gameController(StageDependency.FIRST);
         return gameController.run();
     }
 
