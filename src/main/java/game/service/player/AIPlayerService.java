@@ -40,6 +40,7 @@ public class AIPlayerService implements PlayerService {
     private Bullet nextBullet;
 
     private boolean isHandCuffsUsed;
+    private boolean isHandSawUsed;
 
     public AIPlayerService(Player player, OutputView outputView) {
         this.player = player;
@@ -89,6 +90,7 @@ public class AIPlayerService implements PlayerService {
                                                     rival,                      // 2. target
                                                     gameStateDto);              // 3. game data (탄환 & 턴 정보)
         isHandCuffsUsed = false;
+        isHandSawUsed = false;
         nextBullet = null;
 
         while(true) {
@@ -209,10 +211,15 @@ public class AIPlayerService implements PlayerService {
     private boolean tryToUseHandSaw(ItemUsageRequestDto request) {
         Items inventory = request.caster().items();
         HandSaw item = (HandSaw) HAND_SAW.getInstance();
-        int blue = request.gameDataDto().bullets().getBlueBulletCount();
 
-        if (inventory.contains(item) && 
-            ((blue == 0) || (nextBullet != null && nextBullet.equals(RED)))) {
+        Bullets bullets = request.gameDataDto().bullets();
+
+        int red = bullets.getRedBulletCount();
+        int blue = bullets.getBlueBulletCount();
+
+        if (inventory.contains(item) && !isHandSawUsed &&
+            ((red > blue) || (nextBullet != null && nextBullet.equals(RED)))) {
+            isHandSawUsed = true;
             return true;
         }
         return false;
@@ -229,9 +236,10 @@ public class AIPlayerService implements PlayerService {
 
         Bullets bullets = request.gameDataDto().bullets();
         int red = bullets.getRedBulletCount();
+        int blue = bullets.getBlueBulletCount();
         
         if(inventory.contains(item) &&
-           (red == 0 || (nextBullet != null && nextBullet.equals(BLUE)))) {
+           ((blue > red) || (nextBullet != null && nextBullet.equals(BLUE)))) {
             nextBullet = RED;
             return true;
         }
