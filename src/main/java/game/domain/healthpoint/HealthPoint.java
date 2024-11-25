@@ -37,6 +37,10 @@ public class HealthPoint {
         return value >= 1;
     }
 
+    public boolean isPossibleToHeal(HealthPoint healingPoint) {
+        return (value + healingPoint.value) <= MAX;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

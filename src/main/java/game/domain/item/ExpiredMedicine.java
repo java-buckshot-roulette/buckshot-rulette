@@ -30,6 +30,10 @@ public class ExpiredMedicine implements Item {
 
     }
 
+    public HealthPoint getHealingPoint() {
+        return HEALING_POINT;
+    }
+
     @Override
     public boolean equals(Object o) {
         return o != null && getClass() == o.getClass();
