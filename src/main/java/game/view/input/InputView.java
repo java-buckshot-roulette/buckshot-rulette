@@ -34,7 +34,7 @@ public class InputView {
         return readLine();
     }
 
-    public String askPersonToSelectStartingNumber() {
+    public String askStartingNumber() {
         outputView.print("선택 : ");
         String number = readLine();
         InputValidator.validateStartingNumber(number);

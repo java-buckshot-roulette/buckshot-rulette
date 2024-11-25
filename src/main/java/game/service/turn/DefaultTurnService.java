@@ -9,8 +9,8 @@ import game.domain.turn.Turns;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
-import game.dto.TurnRequestDto;
-import game.dto.TurnResponseDto;
+import game.dto.TurnProceedRequestDto;
+import game.dto.TurnProceedResponseDto;
 import game.service.player.PlayerService;
 import game.view.output.OutputView;
 import java.util.List;
@@ -35,9 +35,9 @@ public class DefaultTurnService implements TurnService {
     }
 
     @Override
-    public TurnResponseDto proceedTurn(TurnRequestDto turnRequestDto) {
+    public TurnProceedResponseDto proceedTurn(TurnProceedRequestDto turnProceedRequestDto) {
         Role currentTurn = turns.getCurrentTurn(); // 현재 턴 가져오기
-        List<PlayerService> playerServices = turnRequestDto.playerServices();
+        List<PlayerService> playerServices = turnProceedRequestDto.playerServices();
 
         PlayerService currentPlayer = playerServices.stream()
                 .filter(h -> h.isPlayerRole(currentTurn))
@@ -49,10 +49,10 @@ public class DefaultTurnService implements TurnService {
                 .toList()
                 .getFirst();
 
-        return executeTurn(currentPlayer, opponent, turnRequestDto.bullets());
+        return executeTurn(currentPlayer, opponent, turnProceedRequestDto.bullets());
     }
 
-    private TurnResponseDto executeTurn(PlayerService currentPlayer, PlayerService opponent, Bullets bullets) {
+    private TurnProceedResponseDto executeTurn(PlayerService currentPlayer, PlayerService opponent, Bullets bullets) {
         outputView.println("*** " + currentPlayer.getName() + " 턴 ***");
         GameStateDto gameStateDto = createGameState(bullets);
 
@@ -62,7 +62,7 @@ public class DefaultTurnService implements TurnService {
 
         updatePlayerState(opponent, response.target());
         updateGameTurn(response);
-        return TurnResponseDto.of(response.gameStateDto().bullets());
+        return TurnProceedResponseDto.of(response.gameStateDto().bullets());
     }
 
     private GameStateDto createGameState(Bullets bullets) {

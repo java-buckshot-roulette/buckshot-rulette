@@ -24,10 +24,7 @@ import game.view.output.OutputView;
 import java.util.ArrayList;
 
 public class StageConfig {
-    public GameController gameController(StageDependency startStage) {
-        OutputView outputView = new OutputView();
-
-        InputView inputView = new InputView(outputView);
+    public GameController gameController(StageDependency startStage, OutputView outputView, InputView inputView) {
 
         PlayerService playerService = new DefaultPlayerService(
                 new Player("player", Role.CHALLENGER, new Items(new ArrayList<>()), new HealthPoint(0),

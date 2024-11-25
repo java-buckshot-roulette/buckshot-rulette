@@ -6,7 +6,6 @@ import game.config.StageConfig;
 import game.config.StageDependency;
 import game.controller.GameController;
 import game.exception.IllegalStartingNumberException;
-import game.service.Stage.GameResult;
 import game.view.output.OutputView;
 import game.view.input.InputView;
 
@@ -20,8 +19,8 @@ import game.view.input.InputView;
  */
 
 public class Application {
-    private InputView inputView;
-    private OutputView outputView;
+    private final InputView inputView;
+    private final OutputView outputView;
 
     public Application() {
         outputView = new OutputView();
@@ -29,43 +28,34 @@ public class Application {
     }
 
     public void run() {
-        outputView.printMenu();
-
-        GameResult result = null;
-
         while (true) {
+            outputView.printMenu();
             int state = parseInt(pickStartingNumber());
 
             switch (state) {
                 case 1:
-                    result = gameStart();
+                    gameStart();
                     break;
                 case 2:
                     System.exit(0);
                     break;
-            }
-
-            if (result != null) {
-                outputView.printResult(result);
-                outputView.printMenu();
-                result = null;
             }
         }
     }
 
     private String pickStartingNumber() {
         try {
-            return inputView.askPersonToSelectStartingNumber();
+            return inputView.askStartingNumber();
         } catch (IllegalStartingNumberException exception) {
             outputView.println(exception.getMessage());
             return pickStartingNumber();
         }
     }
 
-    public GameResult gameStart() {
+    public void gameStart() {
         StageConfig stageConfig = new StageConfig();
-        GameController gameController = stageConfig.gameController(StageDependency.FIRST);
-        return gameController.run();
+        GameController gameController = stageConfig.gameController(StageDependency.FIRST, outputView, inputView);
+        gameController.run();
     }
 
     public static void main(String[] args) {

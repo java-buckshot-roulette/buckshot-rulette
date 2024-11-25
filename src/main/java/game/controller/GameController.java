@@ -5,8 +5,8 @@ import static game.service.Stage.GameResult.ONGOING;
 
 import game.config.StageDependency;
 import game.domain.bullet.Bullets;
-import game.dto.TurnRequestDto;
-import game.dto.TurnResponseDto;
+import game.dto.TurnProceedRequestDto;
+import game.dto.TurnProceedResponseDto;
 import game.service.Defibrillator;
 import game.service.Stage.GameResult;
 import game.service.Stage.StageReferee;
@@ -49,7 +49,7 @@ public class GameController {
         this.defibrillator = new Defibrillator(true, true);
     }
 
-    public GameResult run() {
+    public void run() {
         GameResult gameState = ONGOING;
 
         setupGame();
@@ -67,13 +67,13 @@ public class GameController {
 
             gameState = evaluateGameResult();
         }
-        return gameState;
+        outputView.println(gameState.toMessage());
     }
 
     private void proceedTurn() {
-        TurnRequestDto turnRequestDto = TurnRequestDto.of(List.of(challengerService, dealerService), bullets);
-        TurnResponseDto turnResponseDto = turnService.proceedTurn(turnRequestDto);
-        updateGameState(turnResponseDto);
+        TurnProceedRequestDto turnProceedRequestDto = TurnProceedRequestDto.of(List.of(challengerService, dealerService), bullets);
+        TurnProceedResponseDto turnProceedResponseDto = turnService.proceedTurn(turnProceedRequestDto);
+        updateGameState(turnProceedResponseDto);
     }
 
     // ======= Initialization and Setup =======
@@ -131,8 +131,8 @@ public class GameController {
         );
     }
 
-    private void updateGameState(TurnResponseDto turnResponseDto) {
-        bullets = turnResponseDto.bullets();
+    private void updateGameState(TurnProceedResponseDto turnProceedResponseDto) {
+        bullets = turnProceedResponseDto.bullets();
     }
 }
 
