@@ -89,7 +89,7 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     private ItemUsageRequestDto useItemAndUpdateState(Item item, ItemUsageRequestDto request) {
-        Bullet firstBullet = request.gameDataDto().bullets().CheckFirstBullet();
+        Bullet firstBullet = request.gameDataDto().bullets().checkFirstBullet();
         ItemUsageRequestDto updatedRequest = item.useItem(request);
         printItemUsage(item, updatedRequest, firstBullet);
         return updatedRequest;
@@ -158,7 +158,7 @@ public class DefaultPlayerService implements PlayerService {
         Timer.delay(1000);
 
         if (item.equals(ItemType.MAGNIFYING_GLASS.getInstance())) {
-            Bullet firstBullet = request.gameDataDto().bullets().CheckFirstBullet();
+            Bullet firstBullet = request.gameDataDto().bullets().checkFirstBullet();
             outputView.println("첫 번째 탄환은... " + firstBullet + "\n"); // 돋보기 사용 시 출력
             Timer.delay(1000);
         } else if (item.equals(ItemType.BEAR.getInstance())) {

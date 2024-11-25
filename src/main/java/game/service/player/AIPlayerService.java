@@ -128,7 +128,7 @@ public class AIPlayerService implements PlayerService {
             item = MAGNIFYING_GLASS;
         }
 
-        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().CheckFirstBullet();
+        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().checkFirstBullet();
         printUsingItem(item.getInstance(), firstBullet);
 
         return item.getInstance();
@@ -261,7 +261,7 @@ public class AIPlayerService implements PlayerService {
         
         if (inventory.contains(item) &&
             (nextBullet == null && red > 0 && blue > 0)) {
-            nextBullet = bullets.CheckFirstBullet();
+            nextBullet = bullets.checkFirstBullet();
             return true;
         }
         return false;

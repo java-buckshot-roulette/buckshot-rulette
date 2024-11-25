@@ -89,7 +89,7 @@ public class Bullets {
                 .collect(Collectors.joining(", ")) + "]";
     }
 
-    public Bullet CheckFirstBullet() {
+    public Bullet checkFirstBullet() {
         return values.getFirst();
     }
 }
