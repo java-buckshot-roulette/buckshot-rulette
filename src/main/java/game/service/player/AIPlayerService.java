@@ -112,26 +112,49 @@ public class AIPlayerService implements PlayerService {
 
         ItemType item = SHOT_GUN;
 
-        if(tryToUseBeer(itemUsageRequestDto)) {
-            item = BEAR;
-        } else if(tryToUseCigarettePack(itemUsageRequestDto)) {
-            item = CIGARETTE_PACK;
-        } else if(tryToUseExpiredMedicine(itemUsageRequestDto)) {
-            item = EXPIRED_MEDICINE;
-        } else if(tryToUseHandCuffs(itemUsageRequestDto)) {
-            item = HAND_CUFFS;
-        } else if(tryToUseHandSaw(itemUsageRequestDto)) {
-            item = HAND_SAW;
-        } else if(tryToUseInverter(itemUsageRequestDto)) {
-            item = INVERTER;
-        } else if(tryToUseMagnifyingGlass(itemUsageRequestDto)) {
+        if(tryToUseMagnifyingGlass(itemUsageRequestDto)) {        // 1. 돋보기
             item = MAGNIFYING_GLASS;
+        } else if(tryToUseBeer(itemUsageRequestDto)) {            // 2. 맥주
+            item = BEAR;
+        } else if(tryToUseCigarettePack(itemUsageRequestDto)) {   // 3. 담배
+            item = CIGARETTE_PACK;
+        } else if(tryToUseExpiredMedicine(itemUsageRequestDto)) { // 4. 상한 약
+            item = EXPIRED_MEDICINE;
+        } else if(tryToUseHandCuffs(itemUsageRequestDto)) {       // 5. 수갑
+            item = HAND_CUFFS;
+        } else if(tryToUseHandSaw(itemUsageRequestDto)) {         // 6. 쇠톱
+            item = HAND_SAW;
+        } else if(tryToUseInverter(itemUsageRequestDto)) {        // 7. 인버터
+            item = INVERTER;
         }
 
-        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().checkFirstBullet();
+        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().CheckFirstBullet();
         printUsingItem(item.getInstance(), firstBullet);
 
         return item.getInstance();
+    }
+
+    /**
+     * 다음 탄환이 무엇인지 모르면, 돋보기를 사용합니다.
+     * @param request 아이템 사용 요청 정보
+     * @return 돋보기 아이템 사용 여부
+     */
+    private boolean tryToUseMagnifyingGlass(ItemUsageRequestDto request) {
+        Items inventory = request.caster().items();
+        Item item = MAGNIFYING_GLASS.getInstance();
+
+        Bullets bullets = request.gameDataDto().bullets();
+        int red = bullets.getRedBulletCount();
+        int blue = bullets.getBlueBulletCount();
+
+        if (!inventory.contains(item) ||
+            nextBullet != null || red == 0 || blue == 0) {
+            return false;
+        }
+
+        nextBullet = bullets.CheckFirstBullet();
+
+        return true;
     }
 
     /**
@@ -147,11 +170,12 @@ public class AIPlayerService implements PlayerService {
         int red = bullets.getRedBulletCount();
         int blue = bullets.getBlueBulletCount();
 
-        if (inventory.contains(item) &&
-            (nextBullet == null && red > 0 && blue > 0)) {
-            return true;
+        if (!inventory.contains(item) ||
+            nextBullet != null || red == 0 || blue == 0) {
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     /**
@@ -164,11 +188,12 @@ public class AIPlayerService implements PlayerService {
         Item item = CIGARETTE_PACK.getInstance();
         HealthPoint health = request.caster().healthPoint();
         
-        if (inventory.contains(item) && 
-            health.isPossibleToHeal(((CigarettePack)item).getHealingPoint())) {
-            return true;
+        if (!inventory.contains(item) ||
+            !health.isPossibleToHeal(((CigarettePack)item).getHealingPoint())) {
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     /**
@@ -181,11 +206,12 @@ public class AIPlayerService implements PlayerService {
         Item item = EXPIRED_MEDICINE.getInstance();
         HealthPoint health = request.caster().healthPoint();
 
-        if(inventory.contains(item) && 
-           health.isPossibleToHeal(((ExpiredMedicine)item).getHealingPoint())) {
-            return true;
+        if(!inventory.contains(item) ||
+           !health.isPossibleToHeal(((ExpiredMedicine)item).getHealingPoint())) {
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     /**
@@ -196,15 +222,22 @@ public class AIPlayerService implements PlayerService {
     private boolean tryToUseHandCuffs(ItemUsageRequestDto request) {
         Items inventory = request.caster().items();
         Item item = HAND_CUFFS.getInstance();
-        if(inventory.contains(item) && !isHandCuffsUsed) {
-            isHandCuffsUsed = true;
-            return true;
+
+        Bullets bullets = request.gameDataDto().bullets();
+        int bulletCount = bullets.getRedBulletCount() + bullets.getBlueBulletCount();
+
+        // 탄 개수가 1개인 경우, 샷건 사용 시 무조건 턴이 플레이어에게 넘어가므로 사용하지 않음
+        if(!inventory.contains(item) || isHandCuffsUsed || bulletCount == 1) {
+            return false;
         }
-        return false;
+
+        isHandCuffsUsed = true;
+
+        return true;
     }
 
     /**
-     * 다음 탄환이 실탄임을 알고 있으면, 쇠톱을 사용하여 실탄으로 변경합니다.
+     * 다음 탄환이 실탄임을 알고 있으면, 쇠톱을 사용합니다.
      * @param request 아이템 사용 요청 정보
      * @return 쇠톱 아이템 사용 여부
      */
@@ -217,16 +250,23 @@ public class AIPlayerService implements PlayerService {
         int red = bullets.getRedBulletCount();
         int blue = bullets.getBlueBulletCount();
 
-        if (inventory.contains(item) && !isHandSawUsed &&
-            ((red > blue) || (nextBullet != null && nextBullet.equals(RED)))) {
-            isHandSawUsed = true;
-            return true;
+        if(!inventory.contains(item) || isHandSawUsed) {
+            return false;
         }
-        return false;
+        if(nextBullet == null && red <= blue) {
+            return false;
+        }
+        if(nextBullet != null && nextBullet.equals(BLUE)) {
+            return false;
+        }
+
+        isHandSawUsed = true;
+
+        return true;
     }
 
     /**
-     * 다음 탄환이 공포탄임을 알고 있으면, 인버터를 사용하여 실탄으로 변경합니다.
+     * 다음 탄환이 공포탄임을 알고 있으면, 인버터를 사용합니다.
      * @param request 아이템 사용 요청 정보
      * @return 인버터 아이템 사용 여부
      */
@@ -234,37 +274,16 @@ public class AIPlayerService implements PlayerService {
         Items inventory = request.caster().items();
         Item item = INVERTER.getInstance();
 
-        Bullets bullets = request.gameDataDto().bullets();
-        int red = bullets.getRedBulletCount();
-        int blue = bullets.getBlueBulletCount();
-        
-        if(inventory.contains(item) &&
-           ((blue > red) || (nextBullet != null && nextBullet.equals(BLUE)))) {
-            nextBullet = RED;
-            return true;
+        if(!inventory.contains(item) || nextBullet == null) {
+            return false;
         }
-        return false;
-    }
-
-    /**
-     * 다음 탄환이 무엇인지 모르면, 돋보기를 사용합니다.
-     * @param request 아이템 사용 요청 정보
-     * @return 돋보기 아이템 사용 여부
-     */
-    private boolean tryToUseMagnifyingGlass(ItemUsageRequestDto request) {
-        Items inventory = request.caster().items();
-        Item item = MAGNIFYING_GLASS.getInstance();
-
-        Bullets bullets = request.gameDataDto().bullets();
-        int red = bullets.getRedBulletCount();
-        int blue = bullets.getBlueBulletCount();
-        
-        if (inventory.contains(item) &&
-            (nextBullet == null && red > 0 && blue > 0)) {
-            nextBullet = bullets.checkFirstBullet();
-            return true;
+        if(nextBullet.equals(RED)) {
+            return false;
         }
-        return false;
+
+        nextBullet = RED;
+
+        return true;
     }
 
     private ItemUsageResponseDto useShotGun(Item shotGun, ItemUsageRequestDto itemUsageRequestDto) {
