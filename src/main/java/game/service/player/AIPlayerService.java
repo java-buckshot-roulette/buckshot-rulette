@@ -128,7 +128,7 @@ public class AIPlayerService implements PlayerService {
             item = INVERTER;
         }
 
-        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().CheckFirstBullet();
+        Bullet firstBullet = itemUsageRequestDto.gameDataDto().bullets().checkFirstBullet();
         printUsingItem(item.getInstance(), firstBullet);
 
         return item.getInstance();
@@ -152,7 +152,7 @@ public class AIPlayerService implements PlayerService {
             return false;
         }
 
-        nextBullet = bullets.CheckFirstBullet();
+        nextBullet = bullets.checkFirstBullet();
 
         return true;
     }
