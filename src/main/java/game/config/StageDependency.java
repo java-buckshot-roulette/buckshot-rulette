@@ -6,7 +6,7 @@ import game.dto.PlayerDataDto;
 public enum StageDependency {
     FIRST(0, 1, false, 2, true, 0),
     SECOND(2, 2, false, 4, false, 0),
-    THIRD(4, 2, true, 6, false, 2);
+    THIRD(4, 3, true, 6, false, 2);
 
     private final int itemGenerationQuantity;
     private final boolean isFinalStage;

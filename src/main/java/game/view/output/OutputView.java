@@ -1,7 +1,7 @@
 package game.view.output;
 
 import game.dto.PlayerDataDto;
-import game.service.Stage.GameResult;
+import game.service.Stage.GameState;
 import game.util.Timer;
 
 public class OutputView {
@@ -75,8 +75,8 @@ public class OutputView {
         Timer.delay(2000);
     }
 
-    public void printResult(GameResult result) {
-        if (result.equals(GameResult.GAME_CLEAR)) {
+    public void printResult(GameState result) {
+        if (result.equals(GameState.GAME_CLEAR)) {
             println("축하합니다!");
         } else {
             println("당신은 죽었습니다..");

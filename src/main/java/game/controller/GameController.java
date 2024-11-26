@@ -1,36 +1,26 @@
 package game.controller;
 
-import static game.service.Stage.GameResult.GO_NEXT_STAGE;
-import static game.service.Stage.GameResult.ONGOING;
+import static game.service.Stage.GameState.GO_NEXT_STAGE;
+import static game.service.Stage.GameState.ONGOING;
 
 import game.config.StageDependency;
-import game.domain.LifeAndDeath;
-import game.domain.Player;
 import game.domain.Role;
 import game.domain.bullet.Bullets;
-import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
-import game.domain.item.Items;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
 import game.service.Defibrillator;
-import game.service.Stage.DefaultStageReferee;
-import game.service.Stage.GameResult;
+import game.service.Stage.GameState;
 import game.service.Stage.StageReferee;
 import game.service.bullet.BulletGenerator;
-import game.service.bullet.DefaultBulletGenerator;
-import game.service.item.DefaultItemGenerator;
 import game.service.item.ItemGenerator;
-import game.service.player.AIPlayerService;
-import game.service.player.DefaultPlayerService;
 import game.service.player.PlayerService;
-import game.service.turn.DefaultTurnService;
 import game.service.turn.TurnService;
 import game.util.Randoms;
 import game.view.input.InputView;
 import game.view.output.OutputView;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class GameController {
@@ -63,8 +53,8 @@ public class GameController {
         defibrillator = new Defibrillator(true, true);
     }
 
-    public GameResult run() {
-        GameResult gameState = ONGOING;
+    public GameState run() {
+        GameState gameState = ONGOING;
         initializeStage();
 
         do {
@@ -109,8 +99,11 @@ public class GameController {
 
     private void initializeStage() {
         printStage();
+        // 제새동기 초기화
         defibrillator.initializeDefibrillator();
+        // 플레이어 초기화
         challengerService.initializePlayer(stageDependency);
+        // AI 초기화
         dealerService.initializePlayer(stageDependency);
         prepareForRound();
     }

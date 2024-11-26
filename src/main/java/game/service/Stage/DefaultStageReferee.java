@@ -1,8 +1,8 @@
 package game.service.Stage;
 
 import static game.domain.LifeAndDeath.DEATH;
-import static game.service.Stage.GameResult.*;
-import static game.service.Stage.GameResult.GAME_OVER;
+import static game.service.Stage.GameState.*;
+import static game.service.Stage.GameState.GAME_OVER;
 
 import game.config.StageDependency;
 import game.domain.healthpoint.HealthPoint;
@@ -12,7 +12,7 @@ public class DefaultStageReferee implements StageReferee {
     private static final HealthPoint ZERO_HEALTH = new HealthPoint(0);
 
     @Override
-    public GameResult judgeGameResult(PlayerDataDto challenger, PlayerDataDto dealer, StageDependency stageDependency) {
+    public GameState judgeGameResult(PlayerDataDto challenger, PlayerDataDto dealer, StageDependency stageDependency) {
         if (challenger.lifeAndDeath().equals(DEATH) || challenger.healthPoint().equals(ZERO_HEALTH)) {
             return GAME_OVER;
         }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import game.config.StageConfig;
 import game.config.StageDependency;
 import game.controller.GameController;
-import game.service.Stage.GameResult;
+import game.service.Stage.GameState;
 import game.view.output.OutputView;
 import game.view.input.InputView;
 
@@ -22,8 +22,8 @@ import game.view.input.InputView;
  */
 
 public class Application {
-    private InputView inputView;
-    private OutputView outputView;
+    public InputView inputView;
+    public OutputView outputView;
 
     public Application() {
         outputView = new OutputView();
@@ -33,7 +33,7 @@ public class Application {
     public void run() throws IOException {
         outputView.printMenu();
         
-        GameResult result = null;
+        GameState result = null;
 
         while(true) {
             int state = Integer.parseInt(inputView.askPersonToSelect());
@@ -57,7 +57,7 @@ public class Application {
         }
     }
 
-    public GameResult gameStart() {
+    public GameState gameStart() {
         StageConfig stageConfig = new StageConfig();
         GameController gameController = stageConfig.gameController(StageDependency.FIRST);
         return gameController.run();
