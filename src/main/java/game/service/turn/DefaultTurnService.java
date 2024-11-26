@@ -1,8 +1,5 @@
 package game.service.turn;
 
-import static game.domain.Role.CHALLENGER;
-import static game.domain.Role.DEALER;
-
 import game.domain.Role;
 import game.domain.bullet.Bullets;
 import game.domain.turn.Turns;
@@ -16,7 +13,6 @@ import game.view.output.OutputView;
 import java.util.List;
 
 public class DefaultTurnService implements TurnService {
-    private static final List<Role> INITIAL_TURNS = List.of(CHALLENGER, DEALER);
     private final OutputView outputView;
     private Turns turns;
 
