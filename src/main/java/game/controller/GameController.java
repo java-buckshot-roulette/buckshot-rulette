@@ -7,7 +7,7 @@ import game.config.StageDependency;
 import game.domain.bullet.Bullets;
 import game.dto.TurnProceedRequestDto;
 import game.dto.TurnProceedResponseDto;
-import game.service.Defibrillator;
+import game.service.defibrillator.Defibrillator;
 import game.service.stage.GameResult;
 import game.service.stage.StageReferee;
 import game.service.bullet.BulletGenerator;
