@@ -1,8 +1,8 @@
-package game.service.Stage;
+package game.service.stage;
 
 import static game.domain.LifeAndDeath.DEATH;
-import static game.service.Stage.GameResult.*;
-import static game.service.Stage.GameResult.GAME_OVER;
+import static game.service.stage.GameResult.*;
+import static game.service.stage.GameResult.GAME_OVER;
 
 import game.config.StageDependency;
 import game.domain.healthpoint.HealthPoint;

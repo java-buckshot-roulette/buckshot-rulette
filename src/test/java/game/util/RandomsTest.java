@@ -6,7 +6,6 @@ import game.domain.bullet.Bullet;
 import game.domain.bullet.BulletConfig;
 import game.domain.bullet.Type;
 import game.domain.item.Item;
-import game.domain.item.ItemType;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;

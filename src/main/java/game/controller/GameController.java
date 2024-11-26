@@ -1,15 +1,15 @@
 package game.controller;
 
-import static game.service.Stage.GameResult.GO_NEXT_STAGE;
-import static game.service.Stage.GameResult.ONGOING;
+import static game.service.stage.GameResult.GO_NEXT_STAGE;
+import static game.service.stage.GameResult.ONGOING;
 
 import game.config.StageDependency;
 import game.domain.bullet.Bullets;
 import game.dto.TurnProceedRequestDto;
 import game.dto.TurnProceedResponseDto;
 import game.service.Defibrillator;
-import game.service.Stage.GameResult;
-import game.service.Stage.StageReferee;
+import game.service.stage.GameResult;
+import game.service.stage.StageReferee;
 import game.service.bullet.BulletGenerator;
 import game.service.item.ItemGenerator;
 import game.service.player.PlayerService;

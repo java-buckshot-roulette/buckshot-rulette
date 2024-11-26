@@ -43,7 +43,7 @@ public class Randoms {
     }
 
     public static <T> List<T> shuffle(List<T> list) {
-        List<T> result = new ArrayList(list);
+        List<T> result = new ArrayList<>(list);
         Collections.shuffle(result);
         return result;
     }

@@ -1,4 +1,4 @@
-package game.service.Stage;
+package game.service.stage;
 
 public enum GameResult {
     ONGOING("계속 진행 중"),
