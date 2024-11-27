@@ -94,6 +94,11 @@ public class AIPlayerService implements PlayerService {
         nextBullet = null;
 
         while(true) {
+            HealthPoint myHealth = newitemUsageRequestDto.caster().healthPoint();
+            if(myHealth.getValue() <= 0) {
+                return updatedData(newitemUsageRequestDto);
+            }
+
             Bullets bullets = newitemUsageRequestDto.gameDataDto().bullets();
             if (bullets.isEmpty()) {
                 return updatedData(newitemUsageRequestDto);

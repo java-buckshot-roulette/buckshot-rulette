@@ -6,6 +6,7 @@ import game.config.StageDependency;
 import game.domain.Player;
 import game.domain.Role;
 import game.domain.bullet.Bullet;
+import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
 import game.domain.item.ItemType;
 import game.domain.item.Items;
@@ -75,6 +76,11 @@ public class DefaultPlayerService implements PlayerService {
     // ======= 아이템 사용 처리 =======
     private ItemUsageResponseDto processItemUsage(ItemUsageRequestDto request) {
         while (true) {
+            HealthPoint myHealth = request.caster().healthPoint();
+            if(myHealth.getValue() <= 0) {
+                return createResponse(request);
+            }
+
             if (request.gameDataDto().bullets().isEmpty()) {
                 return handleEmptyBullets(request);
             }
