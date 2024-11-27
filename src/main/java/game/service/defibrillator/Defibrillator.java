@@ -1,4 +1,4 @@
-package game.service;
+package game.service.defibrillator;
 
 import static game.domain.LifeAndDeath.LIFE;
 

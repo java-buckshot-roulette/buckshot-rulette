@@ -1,38 +1,75 @@
 package game.service.turn;
 
-import static game.domain.Role.CHALLENGER;
-import static game.domain.Role.DEALER;
-
 import game.domain.Role;
+import game.domain.bullet.Bullets;
+import game.domain.turn.Turns;
+import game.dto.GameStateDto;
+import game.dto.ItemUsageResponseDto;
+import game.dto.PlayerDataDto;
+import game.dto.TurnProceedRequestDto;
+import game.dto.TurnProceedResponseDto;
+import game.service.player.PlayerService;
+import game.view.output.OutputView;
 import java.util.List;
 
 public class DefaultTurnService implements TurnService {
-    private static final List<Role> INITIAL_TURNS = List.of(CHALLENGER, DEALER);
-    private List<Role> turns;
+    private final OutputView outputView;
+    private Turns turns;
 
-    public DefaultTurnService(List<Role> turns) {
+    public DefaultTurnService(OutputView outputview, Turns turns) {
+        this.outputView = outputview;
         this.turns = turns;
     }
 
     @Override
     public Role getTurn() {
-        return turns.getFirst();
+        return turns.getCurrentTurn();
     }
 
     public void initializeTurn() {
-        turns.clear();
-        for (int i = 0; i < 10; i++) {  // Todo: 매직넘버 제거 방법 고민하기
-            turns.addAll(INITIAL_TURNS);
-        }
+        turns = Turns.initialLialTurns();
     }
 
     @Override
-    public List<Role> requestTurns() {
-        return turns;
+    public TurnProceedResponseDto proceedTurn(TurnProceedRequestDto turnProceedRequestDto) {
+        Role currentTurn = turns.getCurrentTurn(); // 현재 턴 가져오기
+        List<PlayerService> playerServices = turnProceedRequestDto.playerServices();
+
+        PlayerService currentPlayer = playerServices.stream()
+                .filter(h -> h.isPlayerRole(currentTurn))
+                .toList()
+                .getFirst();
+
+        PlayerService opponent = playerServices.stream()
+                .filter(h -> !h.isPlayerRole(currentTurn))
+                .toList()
+                .getFirst();
+
+        return executeTurn(currentPlayer, opponent, turnProceedRequestDto.bullets());
     }
 
-    @Override
-    public void applyTurns(List<Role> turns) {
-        this.turns = turns;
+    private TurnProceedResponseDto executeTurn(PlayerService currentPlayer, PlayerService opponent, Bullets bullets) {
+        outputView.println("*** " + currentPlayer.getName() + " 턴 ***");
+        GameStateDto gameStateDto = createGameState(bullets);
+
+        ItemUsageResponseDto response = currentPlayer.useItem(opponent.requestPlayerDataDto(), gameStateDto);
+        response = ItemUsageResponseDto.of(response.target(), response.gameStateDto().changeTurns(response.gameStateDto()
+                .turns().passTurn()));
+
+        updatePlayerState(opponent, response.target());
+        updateGameTurn(response);
+        return TurnProceedResponseDto.of(response.gameStateDto().bullets());
+    }
+
+    private GameStateDto createGameState(Bullets bullets) {
+        return GameStateDto.of(bullets, turns);
+    }
+
+    private void updateGameTurn(ItemUsageResponseDto itemUsageResponseDto) {
+        this.turns = itemUsageResponseDto.gameStateDto().turns();
+    }
+
+    private void updatePlayerState(PlayerService target, PlayerDataDto newData) {
+        target.applyPlayerDataDto(newData);
     }
 }

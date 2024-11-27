@@ -13,7 +13,7 @@ public class Inverter implements Item {
                 .changeGameData(itemUsageRequestDto
                         .gameDataDto()
                         .changeBullets(newBullets))
-                .reduceCasterItem(this);
+                .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
     }
 
     @Override

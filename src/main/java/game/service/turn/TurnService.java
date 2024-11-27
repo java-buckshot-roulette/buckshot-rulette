@@ -1,14 +1,14 @@
 package game.service.turn;
 
 import game.domain.Role;
-import java.util.List;
+import game.dto.TurnProceedRequestDto;
+import game.dto.TurnProceedResponseDto;
 
 public interface TurnService {
     Role getTurn();
 
     void initializeTurn();
 
-    List<Role> requestTurns();
+    TurnProceedResponseDto proceedTurn(TurnProceedRequestDto turnProceedRequestDto);
 
-    void applyTurns(List<Role> turns);
 }

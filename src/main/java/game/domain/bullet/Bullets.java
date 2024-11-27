@@ -42,8 +42,8 @@ public class Bullets {
         return values.isEmpty();
     }
 
-    public void reload(List<Bullet> bullets) {
-        values.addAll(bullets);
+    public Bullets reload(List<Bullet> bullets) {
+        return new Bullets(bullets);
     }
 
     private List<Bullet> getBullets() {
@@ -89,7 +89,7 @@ public class Bullets {
                 .collect(Collectors.joining(", ")) + "]";
     }
 
-    public Bullet CheckFirstBullet() {
+    public Bullet checkFirstBullet() {
         return values.getFirst();
     }
 }

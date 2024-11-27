@@ -1,14 +1,13 @@
 package game;
 
-import java.io.IOException;
+import static game.util.Convertor.parseInt;
 
 import game.config.StageConfig;
 import game.config.StageDependency;
 import game.controller.GameController;
-import game.service.Stage.GameState;
+import game.exception.IllegalStartingNumberException;
 import game.view.output.OutputView;
 import game.view.input.InputView;
-import java.time.LocalDateTime;
 
 /*
  * 수정해야 할 사항
@@ -23,59 +22,46 @@ import java.time.LocalDateTime;
  */
 
 public class Application {
-    public InputView inputView;
-    public OutputView outputView;
+    private final InputView inputView;
+    private final OutputView outputView;
 
     public Application() {
         outputView = new OutputView();
         inputView = new InputView(outputView);
     }
 
-    public GameState selectMenu() {
-        int state = 0;
-        try {
-            state = Integer.parseInt(inputView.askPersonToSelect());
-        }catch(Exception e) {
-            outputView.println("숫자를 입력해주세요");
-            return null;
-        }
-        switch (state) {
-            case 1:
-                outputView.println("게임을 시작합니다.\n");
-                return gameStart();
-            case 2:
-                System.exit(0);
-                break;
-            default:
-                outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
-                break;
-        }
+    public void run() {
+        while (true) {
+            outputView.printMenu();
+            int state = parseInt(pickStartingNumber());
 
-        return null;
-    }
-
-    public void run() throws IOException {
-
-        outputView.printMenu();
-
-        while(true) {
-            GameState result = selectMenu();
-
-            if(result != null) {
-                outputView.printResult(result);
-                outputView.printMenu();
+            switch (state) {
+                case 1:
+                    gameStart();
+                    break;
+                case 2:
+                    System.exit(0);
+                    break;
             }
         }
     }
 
-    public GameState gameStart() {
-
-        StageConfig stageConfig = new StageConfig();
-        GameController gameController = stageConfig.gameController(StageDependency.FIRST);
-        return gameController.run();
+    private String pickStartingNumber() {
+        try {
+            return inputView.askStartingNumber();
+        } catch (IllegalStartingNumberException exception) {
+            outputView.println(exception.getMessage());
+            return pickStartingNumber();
+        }
     }
 
-    public static void main(String[] args) throws IOException {
+    public void gameStart() {
+        StageConfig stageConfig = new StageConfig();
+        GameController gameController = stageConfig.gameController(StageDependency.FIRST, outputView, inputView);
+        gameController.run();
+    }
+
+    public static void main(String[] args) {
         Application app = new Application();
         app.run();
     }

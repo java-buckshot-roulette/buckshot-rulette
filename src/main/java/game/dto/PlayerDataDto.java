@@ -1,14 +1,20 @@
 package game.dto;
 
 import game.domain.LifeAndDeath;
+import game.domain.Player;
 import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
 import game.domain.item.Items;
 import java.util.Objects;
 
 public record PlayerDataDto(HealthPoint healthPoint, Items items, LifeAndDeath lifeAndDeath) {
-    public PlayerDataDto reduceItem(Item item) {
-        return new PlayerDataDto(this.healthPoint, items.reduceItem(item), lifeAndDeath);
+
+    public static PlayerDataDto of(HealthPoint healthPoint, Items items, LifeAndDeath lifeAndDeath) {
+        return new PlayerDataDto(healthPoint, items, lifeAndDeath);
+    }
+
+    public PlayerDataDto changeItems(Items items) {
+        return new PlayerDataDto(healthPoint, items, lifeAndDeath);
     }
 
     public PlayerDataDto healPlayer(HealthPoint healingPoint) {
@@ -25,8 +31,7 @@ public record PlayerDataDto(HealthPoint healthPoint, Items items, LifeAndDeath l
             return false;
         }
         PlayerDataDto that = (PlayerDataDto) o;
-        return Objects.equals(items, that.items) && Objects.equals(healthPoint, that.healthPoint)
-                && lifeAndDeath == that.lifeAndDeath;
+        return this == that;
     }
 
     @Override

@@ -1,12 +1,28 @@
 package game.domain.healthpoint;
 
+import static java.lang.Math.max;
+
 import java.util.Objects;
 
 public class HealthPoint {
+    public static final int ZERO = 0;
+    public static final int MAX = 6;
+
     private final int value;
 
     public HealthPoint(int value) {
-        this.value = value;
+        this.value = getVerifiedValue(value);
+    }
+
+    public static HealthPoint of(int value) {
+        return new HealthPoint(value);
+    }
+
+    private int getVerifiedValue(int initialValue) {
+        if(initialValue > MAX) {
+            return MAX;
+        }
+        return max(initialValue, 0);
     }
 
     public HealthPoint heal(HealthPoint healingPoint) {
@@ -19,6 +35,14 @@ public class HealthPoint {
 
     public boolean isGreaterThanOne() {
         return value >= 1;
+    }
+
+    public boolean isPossibleToHeal(HealthPoint healingPoint) {
+        return (value + healingPoint.value) <= MAX;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override

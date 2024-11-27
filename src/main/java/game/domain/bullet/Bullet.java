@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Bullet {
     private final Type type;
-    private int damage;
+    private final int damage;
 
     public Bullet(Type type) {
         this.type = type;
@@ -17,7 +17,7 @@ public class Bullet {
     }
 
     public Bullet doubleUpDamage() {
-        return new Bullet(this.type, this.damage *= 2);
+        return new Bullet(this.type, this.damage * 2);
     }
 
     public Bullet invertType() {

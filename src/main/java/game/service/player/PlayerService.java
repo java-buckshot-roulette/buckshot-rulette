@@ -1,6 +1,7 @@
 package game.service.player;
 
 import game.config.StageDependency;
+import game.domain.Role;
 import game.domain.item.Item;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageResponseDto;
@@ -18,4 +19,10 @@ public interface PlayerService {
     void addItem(List<Item> items);
 
     void initializePlayer(StageDependency stageDependency);
+
+    String getName();
+
+    void setPlayerName(String s);
+
+    boolean isPlayerRole(Role role);
 }

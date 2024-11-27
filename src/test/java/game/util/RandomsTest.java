@@ -1,6 +1,6 @@
 package game.util;
 
-import static game.domain.item.ItemConfig.BEAR;
+import static game.domain.item.ItemType.BEAR;
 
 import game.domain.bullet.Bullet;
 import game.domain.bullet.BulletConfig;
@@ -15,7 +15,8 @@ class RandomsTest {
     @Test
     void 아이템_생성() {
         //given
-        List<Item> item = List.of(BEAR);
+        Item bear = BEAR.getInstance();
+        List<Item> item = List.of(bear);
 
         //when
         Optional<Item> generatedItem = Randoms.pickItemInList(item);
@@ -23,7 +24,7 @@ class RandomsTest {
         //then
         Assertions.assertThat(generatedItem)
                 .isPresent()
-                .contains(BEAR);
+                .contains(bear);
     }
 
     @Test

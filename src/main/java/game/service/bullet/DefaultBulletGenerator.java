@@ -6,11 +6,7 @@ import static game.util.Randoms.pickBulletInList;
 import static game.util.Randoms.shuffle;
 
 import game.domain.bullet.Bullet;
-import game.domain.bullet.BulletConfig;
-import game.domain.bullet.Bullets;
-import game.domain.bullet.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import game.domain.LifeAndDeath;
 import game.domain.bullet.Bullets;
 import game.domain.healthpoint.HealthPoint;
+import game.domain.turn.Turns;
 import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.PlayerDataDto;
@@ -21,13 +22,13 @@ class ExpiredMedicineTest {
     @Test
     void 상한약을_사용한이후_목숨이_이전과_달라짐() {
         //given
-        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+        PlayerDataDto caster = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        PlayerDataDto target = new PlayerDataDto(new HealthPoint(8), new Items(Collections.emptyList()),
+        PlayerDataDto target = new PlayerDataDto(new HealthPoint(6), new Items(Collections.emptyList()),
                 LifeAndDeath.LIFE);
 
-        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), List.of(CHALLENGER, DEALER));
+        GameStateDto gameStateDto = new GameStateDto(new Bullets(List.of(RED, BLUE)), Turns.initialLialTurns());
 
         ItemUsageRequestDto itemUsageRequestDto = new ItemUsageRequestDto(caster, target, gameStateDto);
 
@@ -39,7 +40,7 @@ class ExpiredMedicineTest {
         Assertions.assertThat(newItemRequest
                         .caster()
                         .healthPoint())
-                .isNotEqualTo(new HealthPoint(8));
+                .isNotEqualTo(new HealthPoint(6));
     }
 
 }

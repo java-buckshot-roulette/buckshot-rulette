@@ -14,7 +14,11 @@ public class CigarettePack implements Item {
         PlayerDataDto newCaster = itemUsageRequestDto.caster();
         newCaster = newCaster.healPlayer(HEALING_POINT);
         return new ItemUsageRequestDto(newCaster, itemUsageRequestDto.target(), itemUsageRequestDto.gameDataDto())
-                .reduceCasterItem(this);
+                .changeCasterItems(itemUsageRequestDto.caster().items().reduceItem(this));
+    }
+
+    public HealthPoint getHealingPoint() {
+        return HEALING_POINT;
     }
 
     @Override
