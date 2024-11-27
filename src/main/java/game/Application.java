@@ -8,6 +8,7 @@ import game.controller.GameController;
 import game.service.Stage.GameState;
 import game.view.output.OutputView;
 import game.view.input.InputView;
+import java.time.LocalDateTime;
 
 /*
  * 수정해야 할 사항
@@ -30,25 +31,28 @@ public class Application {
         inputView = new InputView(outputView);
     }
 
+    public GameState selectMenu(int state) {
+        switch (state) {
+            case 1:
+                outputView.println("게임을 시작합니다.\n");
+                return gameStart();
+            case 2:
+                System.exit(0);
+                break;
+            default:
+                outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
+                break;
+        }
+        return null;
+    }
+
     public void run() throws IOException {
         outputView.printMenu();
         
-        GameState result = null;
+        GameState result = selectMenu(Integer.parseInt(inputView.askPersonToSelect()));
 
         while(true) {
             int state = Integer.parseInt(inputView.askPersonToSelect());
-
-            switch (state) {
-                case 1:
-                    result = gameStart();
-                    break;
-                case 2:
-                    System.exit(0);
-                    break;
-                default:
-                    outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
-                    break;
-            }
 
             if(result != null) {
                 outputView.printResult(result);
@@ -58,6 +62,7 @@ public class Application {
     }
 
     public GameState gameStart() {
+
         StageConfig stageConfig = new StageConfig();
         GameController gameController = stageConfig.gameController(StageDependency.FIRST);
         return gameController.run();
