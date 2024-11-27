@@ -31,25 +31,32 @@ public class Application {
         inputView = new InputView(outputView);
     }
 
-    public GameState selectMenu(int state) {
-        switch (state) {
-            case 1:
-                outputView.println("게임을 시작합니다.\n");
-                return gameStart();
-            case 2:
-                System.exit(0);
-                break;
-            default:
-                outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
-                break;
+    public GameState selectMenu() {
+//        int state = 0;
+        try {
+            int state = Integer.parseInt(inputView.askPersonToSelect());
+            switch (state) {
+                case 1:
+                    outputView.println("게임을 시작합니다.\n");
+                    return gameStart();
+                case 2:
+                    System.exit(0);
+                    break;
+                default:
+                    outputView.println("잘못된 입력입니다. 다시 입력해주세요.\n");
+                    break;
+            }
+        }catch(Exception e) {
+            outputView.println("숫자를 입력해주세요");
         }
+
         return null;
     }
 
     public void run() throws IOException {
+
         outputView.printMenu();
-        
-        GameState result = selectMenu(Integer.parseInt(inputView.askPersonToSelect()));
+        GameState result = selectMenu();
 
         while(true) {
             int state = Integer.parseInt(inputView.askPersonToSelect());
