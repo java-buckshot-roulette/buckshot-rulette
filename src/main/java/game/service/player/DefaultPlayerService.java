@@ -6,6 +6,7 @@ import game.config.StageDependency;
 import game.domain.Player;
 import game.domain.Role;
 import game.domain.bullet.Bullet;
+import game.domain.healthpoint.HealthPoint;
 import game.domain.item.Item;
 import game.domain.item.ItemType;
 import game.domain.item.Items;
@@ -13,6 +14,7 @@ import game.dto.GameStateDto;
 import game.dto.ItemUsageRequestDto;
 import game.dto.ItemUsageResponseDto;
 import game.dto.PlayerDataDto;
+import game.exception.DuplicateUsingItemException;
 import game.exception.OutOfPossessionItemException;
 import game.util.Convertor;
 import game.util.Timer;
@@ -24,6 +26,9 @@ public class DefaultPlayerService implements PlayerService {
     private Player player;
     private final InputView inputView;
     private final OutputView outputView;
+
+    private boolean isHandCuffsUsed;
+    private boolean isHandSawUsed;
 
     public DefaultPlayerService(Player player, InputView inputView, OutputView outputView) {
         this.player = player;
@@ -74,7 +79,14 @@ public class DefaultPlayerService implements PlayerService {
 
     // ======= 아이템 사용 처리 =======
     private ItemUsageResponseDto processItemUsage(ItemUsageRequestDto request) {
+        isHandCuffsUsed = false;
+        isHandSawUsed = false;
         while (true) {
+            HealthPoint myHealth = request.caster().healthPoint();
+            if(myHealth.getValue() <= 0) {
+                return createResponse(request);
+            }
+
             if (request.gameDataDto().bullets().isEmpty()) {
                 return handleEmptyBullets(request);
             }
@@ -82,6 +94,10 @@ public class DefaultPlayerService implements PlayerService {
             Item item = getItemInput(request);
             if (item.equals(ItemType.SHOT_GUN.getInstance())) {
                 return handleShotgunUsage(request, item);
+            } else if (item.equals(ItemType.HAND_CUFFS.getInstance())) {
+                isHandCuffsUsed = true;
+            } else if (item.equals(ItemType.HAND_SAW.getInstance())) {
+                isHandSawUsed = true;
             }
             
             request = useItemAndUpdateState(item, request);
@@ -141,7 +157,6 @@ public class DefaultPlayerService implements PlayerService {
         } catch (Exception exception) {
             outputView.println(exception.getMessage());
             return readItem(request);
-
         }
     }
 
@@ -150,6 +165,12 @@ public class DefaultPlayerService implements PlayerService {
         if (!inventory.contains(StringToItem(item)) && 
             !item.equals(ItemType.SHOT_GUN.getName())) {
             throw new OutOfPossessionItemException();
+        }
+        if (item.equals(ItemType.HAND_CUFFS.getName()) && isHandCuffsUsed) {
+            throw new DuplicateUsingItemException();
+        }
+        if (item.equals(ItemType.HAND_SAW.getName()) && isHandSawUsed) {
+            throw new DuplicateUsingItemException();
         }
     }
 

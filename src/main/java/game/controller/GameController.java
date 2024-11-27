@@ -15,6 +15,7 @@ import game.service.item.ItemGenerator;
 import game.service.player.PlayerService;
 import game.service.turn.TurnService;
 import game.util.Randoms;
+import game.util.Timer;
 import game.view.input.InputView;
 import game.view.output.OutputView;
 import java.util.List;
@@ -68,6 +69,7 @@ public class GameController {
             gameState = evaluateGameResult();
         }
         outputView.println(gameState.toMessage());
+        Timer.delay(1000);
     }
 
     private void proceedTurn() {
